@@ -69,6 +69,64 @@
     });
   }
 
+  // Smooth FAQ accordion — eases open/close with height + opacity
+  document.querySelectorAll(".faq__item").forEach((item) => {
+    const summary = item.querySelector("summary");
+    const body = item.querySelector(".faq__body");
+    if (!summary || !body) return;
+
+    summary.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (item.dataset.busy === "1") return;
+      item.dataset.busy = "1";
+
+      const isOpen = item.hasAttribute("open");
+      const EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
+
+      if (isOpen) {
+        // CLOSE — start from current visible height, animate to 0
+        const startH = body.offsetHeight;
+        body.style.height = startH + "px";
+        body.style.opacity = "1";
+        body.style.overflow = "hidden";
+        body.offsetHeight; // force reflow to commit the start height
+        body.style.transition = `height 320ms ${EASE}, opacity 200ms ease`;
+        body.style.height = "0px";
+        body.style.opacity = "0";
+
+        const onEnd = (ev) => {
+          if (ev.propertyName !== "height") return;
+          body.removeEventListener("transitionend", onEnd);
+          item.removeAttribute("open");
+          body.style.cssText = "";
+          item.dataset.busy = "";
+        };
+        body.addEventListener("transitionend", onEnd);
+      } else {
+        // OPEN — wait one frame so the body is in layout, then measure
+        item.setAttribute("open", "");
+        requestAnimationFrame(() => {
+          const targetH = body.scrollHeight;
+          body.style.height = "0px";
+          body.style.opacity = "0";
+          body.style.overflow = "hidden";
+          body.offsetHeight; // force reflow
+          body.style.transition = `height 420ms ${EASE}, opacity 260ms ease`;
+          body.style.height = targetH + "px";
+          body.style.opacity = "1";
+
+          const onEnd = (ev) => {
+            if (ev.propertyName !== "height") return;
+            body.removeEventListener("transitionend", onEnd);
+            body.style.cssText = "";
+            item.dataset.busy = "";
+          };
+          body.addEventListener("transitionend", onEnd);
+        });
+      }
+    });
+  });
+
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener("click", (e) => {
       const id = a.getAttribute("href");

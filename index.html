@@ -19,6 +19,12 @@
 
     <link rel="icon" href="assets/logo.png" type="image/png" />
     <link rel="stylesheet" href="styles.css" />
+
+    <!-- Vercel Web Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -191,7 +197,6 @@
               </div>
               <h3 class="member__name">Radhakishan Jangid</h3>
               <p class="member__current"><strong>Software Engineer</strong> at <strong>CacheTech Advisor Solutions</strong></p>
-              <p class="member__bio">Backend, frontend, and the strategy to ship both. Ex-EduBridge tech lead.</p>
               <a class="member__link" href="https://www.linkedin.com/in/radhakishanjangid/" target="_blank" rel="noopener" aria-label="Radhakishan Jangid on LinkedIn">LinkedIn ↗</a>
             </article>
 
@@ -205,7 +210,6 @@
               </div>
               <h3 class="member__name">Nitin Singh</h3>
               <p class="member__current"><strong>Senior Frontend Developer</strong> at <strong>Altudo</strong></p>
-              <p class="member__bio">Sitecore + Next.js. Frontend that doesn't fall apart.</p>
               <a class="member__link" href="https://www.linkedin.com/in/nitin-u-singh/" target="_blank" rel="noopener" aria-label="Nitin Singh on LinkedIn">LinkedIn ↗</a>
             </article>
 
@@ -219,7 +223,6 @@
               </div>
               <h3 class="member__name">Nishchal Muradia</h3>
               <p class="member__current"><strong>SDE-3</strong> at <strong>Oracle</strong></p>
-              <p class="member__bio">Built search at Flipkart. Distributed systems nerd.</p>
               <a class="member__link" href="https://www.linkedin.com/in/nishchal-muradia/" target="_blank" rel="noopener" aria-label="Nishchal Muradia on LinkedIn">LinkedIn ↗</a>
             </article>
 
@@ -233,7 +236,6 @@
               </div>
               <h3 class="member__name">Rakesh Gupta</h3>
               <p class="member__current"><strong>Software Engineer</strong> at <strong>Redrob</strong></p>
-              <p class="member__bio">React + Next.js + AI. Frontend for products with millions of downloads.</p>
               <a class="member__link" href="https://www.linkedin.com/in/rakesh-gupta29/" target="_blank" rel="noopener" aria-label="Rakesh Gupta on LinkedIn">LinkedIn ↗</a>
             </article>
 
@@ -247,7 +249,6 @@
               </div>
               <h3 class="member__name">Amit Kumar</h3>
               <p class="member__current"><strong>Software Developer</strong> at <strong>Redrob</strong></p>
-              <p class="member__bio">Backend that doesn't need a rewrite in 6 months.</p>
               <a class="member__link" href="https://www.linkedin.com/in/amit-kumar-93307a219/" target="_blank" rel="noopener" aria-label="Amit Kumar on LinkedIn">LinkedIn ↗</a>
             </article>
 
@@ -261,7 +262,6 @@
               </div>
               <h3 class="member__name">Nitish Patel</h3>
               <p class="member__current"><strong>Software Developer</strong> at <strong>Sosuv</strong></p>
-              <p class="member__bio">Frontend + backend. Fast turnaround, fewer surprises.</p>
               <a class="member__link" href="https://www.linkedin.com/in/nitish-patel009" target="_blank" rel="noopener" aria-label="Nitish Patel on LinkedIn">LinkedIn ↗</a>
             </article>
 
@@ -275,7 +275,6 @@
               </div>
               <h3 class="member__name">Shivansh Mehrotra</h3>
               <p class="member__current"><strong>Software Engineer</strong> at <strong>Ev Software Solution</strong></p>
-              <p class="member__bio">QA + delivery. Finds the bug before your users do.</p>
               <a class="member__link" href="https://www.linkedin.com/in/shivansh-mehrotra-24343023b" target="_blank" rel="noopener" aria-label="Shivansh Mehrotra on LinkedIn">LinkedIn ↗</a>
             </article>
           </div>
@@ -293,13 +292,11 @@
             <article class="bento__card" data-tone="blue">
               <span class="bento__icon" aria-hidden="true">🌐</span>
               <h3 class="bento__title">Web development</h3>
-              <p class="bento__body">
-                Marketing sites, dashboards, custom apps. Fast, accessible, and built
-                to not fall apart in six months.
-              </p>
+              <p class="bento__tagline">Fast, accessible sites. Built to last.</p>
               <ul class="bento__list">
-                <li>Next.js &amp; React frontends</li>
-                <li>Headless CMS (Sitecore, Sanity, Contentful)</li>
+                <li>Marketing sites &amp; landing pages</li>
+                <li>Custom dashboards &amp; web apps</li>
+                <li>Next.js, React, headless CMS</li>
                 <li>Performance budgets baked in</li>
               </ul>
               <a class="bento__cta" href="#contact">
@@ -311,10 +308,13 @@
             <article class="bento__card" data-tone="green">
               <span class="bento__icon" aria-hidden="true">⚙️</span>
               <h3 class="bento__title">Automation</h3>
-              <p class="bento__body">
-                Kill the repetitive work. We wire up the boring so your team doesn't
-                have to do it.
-              </p>
+              <p class="bento__tagline">Wire up the boring. Skip the repetitive work.</p>
+              <ul class="bento__list">
+                <li>Lead routing &amp; CRM sync</li>
+                <li>Workflow triggers &amp; notifications</li>
+                <li>Third-party API glue</li>
+                <li>Scheduled jobs &amp; webhooks</li>
+              </ul>
               <a class="bento__cta" href="#contact">
                 <span>Talk to us</span>
                 <span aria-hidden="true">→</span>
@@ -324,10 +324,13 @@
             <article class="bento__card" data-tone="red">
               <span class="bento__icon" aria-hidden="true">🧠</span>
               <h3 class="bento__title">AI integrations</h3>
-              <p class="bento__body">
-                Real AI features, not buzzwords. LLMs, agents, retrieval — plugged
-                into your product.
-              </p>
+              <p class="bento__tagline">Real AI features. No buzzwords.</p>
+              <ul class="bento__list">
+                <li>LLM search, chat &amp; summarization</li>
+                <li>Smart inbox &amp; auto-tagging</li>
+                <li>RAG &amp; agent workflows</li>
+                <li>Embeddings &amp; vector search</li>
+              </ul>
               <a class="bento__cta" href="#contact">
                 <span>Talk to us</span>
                 <span aria-hidden="true">→</span>
