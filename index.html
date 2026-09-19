@@ -38,7 +38,10 @@
           <a href="#faq">FAQs</a>
         </nav>
 
-        <a class="btn btn--primary nav__cta" href="#contact">Let's talk</a>
+        <a class="btn btn--primary nav__cta" href="#contact">
+          Let's talk
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
     </header>
 
@@ -123,14 +126,25 @@
             </div>
 
             <div class="hero__card hero__card--bottom">
-              <div class="hero__card-row">
-                <span class="hero__chip"><span aria-hidden="true">⚙️</span> Automation</span>
-                <span class="hero__chip hero__chip--muted">2 mins ago</span>
+              <div class="notif">
+                <span class="notif__icon" aria-hidden="true">⚙️</span>
+                <div class="notif__body">
+                  <div class="notif__head">
+                    <strong>Automation</strong>
+                    <span class="notif__status">Shipped ✓</span>
+                  </div>
+                  <div class="notif__sub">12 tasks processed · 2 mins ago</div>
+                </div>
               </div>
-              <div class="hero__card-line"></div>
-              <div class="hero__card-line hero__card-line--w60"></div>
-              <div class="hero__card-row hero__card-row--end">
-                <span class="hero__chip hero__chip--ok">Shipped ✓</span>
+              <div class="notif notif--row">
+                <span class="notif__avatar" aria-hidden="true">SK</span>
+                <div class="notif__body">
+                  <div class="notif__head">
+                    <strong>New lead</strong>
+                    <span class="notif__time">just now</span>
+                  </div>
+                  <div class="notif__sub">Routed to your inbox.</div>
+                </div>
               </div>
             </div>
           </div>
@@ -169,64 +183,78 @@
           <div class="team__grid">
             <article class="member">
               <div class="member__photo-wrap">
-                <img src="assets/partners/Nitin Profole photo.png" alt="Nitin Singh" class="member__photo" loading="lazy" />
-              </div>
-              <h3 class="member__name">Nitin Singh</h3>
-              <p class="member__role">Frontend &amp; CMS</p>
-              <a class="member__link" href="https://www.linkedin.com/in/nitin-u-singh/" target="_blank" rel="noopener" aria-label="Nitin Singh on LinkedIn">LinkedIn ↗</a>
-            </article>
-
-            <article class="member">
-              <div class="member__photo-wrap">
                 <img src="assets/partners/Radha kishan profile photo.png" alt="Radhakishan Jangid" class="member__photo" loading="lazy" />
+                <span class="member__years">8+</span>
               </div>
+              <p class="member__eyebrow">Full-stack &amp; SaaS</p>
               <h3 class="member__name">Radhakishan Jangid</h3>
-              <p class="member__role">Full-stack &amp; SaaS</p>
+              <p class="member__bio">Backend, frontend, and the strategy to ship both. Ex-EduBridge tech lead.</p>
               <a class="member__link" href="https://www.linkedin.com/in/radhakishanjangid/" target="_blank" rel="noopener" aria-label="Radhakishan Jangid on LinkedIn">LinkedIn ↗</a>
             </article>
 
             <article class="member">
               <div class="member__photo-wrap">
-                <img src="assets/partners/Nischal Profile photo.png" alt="Nishchal Muradia" class="member__photo" loading="lazy" />
+                <img src="assets/partners/Nitin Profole photo.png" alt="Nitin Singh" class="member__photo" loading="lazy" />
+                <span class="member__years">8+</span>
               </div>
+              <p class="member__eyebrow">Senior Frontend &amp; CMS</p>
+              <h3 class="member__name">Nitin Singh</h3>
+              <p class="member__bio">Sitecore + Next.js. 8+ years of frontend that doesn't fall apart.</p>
+              <a class="member__link" href="https://www.linkedin.com/in/nitin-u-singh/" target="_blank" rel="noopener" aria-label="Nitin Singh on LinkedIn">LinkedIn ↗</a>
+            </article>
+
+            <article class="member">
+              <div class="member__photo-wrap">
+                <img src="assets/partners/Nischal Profile photo.png" alt="Nishchal Muradia" class="member__photo" loading="lazy" />
+                <span class="member__years">7+</span>
+              </div>
+              <p class="member__eyebrow">Backend &amp; Distributed Systems</p>
               <h3 class="member__name">Nishchal Muradia</h3>
-              <p class="member__role">Backend &amp; Distributed Systems</p>
+              <p class="member__bio">Backend at Oracle. Built search at Flipkart. Distributed systems nerd.</p>
               <a class="member__link" href="https://www.linkedin.com/in/nishchal-muradia/" target="_blank" rel="noopener" aria-label="Nishchal Muradia on LinkedIn">LinkedIn ↗</a>
             </article>
 
             <article class="member">
               <div class="member__photo-wrap">
                 <img src="assets/partners/Rakesh Profile photo.png" alt="Rakesh Gupta" class="member__photo" loading="lazy" />
+                <span class="member__years">5+</span>
               </div>
+              <p class="member__eyebrow">Frontend &amp; AI SaaS</p>
               <h3 class="member__name">Rakesh Gupta</h3>
-              <p class="member__role">Frontend &amp; AI SaaS</p>
+              <p class="member__bio">React + Next.js + AI. Frontend for products with millions of downloads.</p>
               <a class="member__link" href="https://www.linkedin.com/in/rakesh-gupta29/" target="_blank" rel="noopener" aria-label="Rakesh Gupta on LinkedIn">LinkedIn ↗</a>
             </article>
 
             <article class="member">
               <div class="member__photo-wrap">
                 <img src="assets/partners/Amit Profile photo.png" alt="Amit Kumar" class="member__photo" loading="lazy" />
+                <span class="member__years">3+</span>
               </div>
+              <p class="member__eyebrow">Full-stack Engineer</p>
               <h3 class="member__name">Amit Kumar</h3>
-              <p class="member__role">Full-stack Engineer</p>
+              <p class="member__bio">Full-stack at Redrob. Backend that doesn't need a rewrite in 6 months.</p>
               <a class="member__link" href="https://www.linkedin.com/in/amit-kumar-93307a219/" target="_blank" rel="noopener" aria-label="Amit Kumar on LinkedIn">LinkedIn ↗</a>
             </article>
 
             <article class="member">
               <div class="member__photo-wrap">
                 <img src="assets/partners/Nitish profile photo.png" alt="Nitish Patel" class="member__photo" loading="lazy" />
+                <span class="member__years">2+</span>
               </div>
+              <p class="member__eyebrow">Frontend &amp; Backend</p>
               <h3 class="member__name">Nitish Patel</h3>
-              <p class="member__role">Frontend &amp; Backend</p>
+              <p class="member__bio">Frontend + backend at Sosuv. Fast turnaround, fewer surprises.</p>
               <a class="member__link" href="https://www.linkedin.com/in/nitish-patel009" target="_blank" rel="noopener" aria-label="Nitish Patel on LinkedIn">LinkedIn ↗</a>
             </article>
 
             <article class="member">
               <div class="member__photo-wrap">
                 <img src="assets/partners/Shrivansh profile photo.png" alt="Shivansh Mehrotra" class="member__photo" loading="lazy" />
+                <span class="member__years">2+</span>
               </div>
+              <p class="member__eyebrow">QA &amp; Delivery</p>
               <h3 class="member__name">Shivansh Mehrotra</h3>
-              <p class="member__role">QA &amp; Delivery</p>
+              <p class="member__bio">QA + delivery. Finds the bug before your users do.</p>
               <a class="member__link" href="https://www.linkedin.com/in/shivansh-mehrotra-24343023b" target="_blank" rel="noopener" aria-label="Shivansh Mehrotra on LinkedIn">LinkedIn ↗</a>
             </article>
           </div>
@@ -253,7 +281,10 @@
                 <li>Headless CMS (Sitecore, Sanity, Contentful)</li>
                 <li>Performance budgets baked in</li>
               </ul>
-              <a class="bento__cta" href="#contact">Tell us about your project →</a>
+              <a class="bento__cta" href="#contact">
+                <span>Tell us about your project</span>
+                <span aria-hidden="true">→</span>
+              </a>
             </article>
 
             <article class="bento__card" data-tone="green">
@@ -263,7 +294,10 @@
                 Kill the repetitive work. We wire up the boring so your team doesn't
                 have to do it.
               </p>
-              <a class="bento__cta" href="#contact">Talk to us →</a>
+              <a class="bento__cta" href="#contact">
+                <span>Talk to us</span>
+                <span aria-hidden="true">→</span>
+              </a>
             </article>
 
             <article class="bento__card" data-tone="red">
@@ -273,7 +307,10 @@
                 Real AI features, not buzzwords. LLMs, agents, retrieval — plugged
                 into your product.
               </p>
-              <a class="bento__cta" href="#contact">Talk to us →</a>
+              <a class="bento__cta" href="#contact">
+                <span>Talk to us</span>
+                <span aria-hidden="true">→</span>
+              </a>
             </article>
 
             <article class="bento__card" data-tone="yellow">
@@ -283,7 +320,10 @@
                 Clean, opinionated design. No Dribbble-shot theater — just
                 interfaces people actually use.
               </p>
-              <a class="bento__cta" href="#contact">Talk to us →</a>
+              <a class="bento__cta" href="#contact">
+                <span>Talk to us</span>
+                <span aria-hidden="true">→</span>
+              </a>
             </article>
           </div>
         </div>
@@ -510,8 +550,9 @@
               </p>
             </div>
             <div class="cta__actions">
-              <a class="btn btn--primary btn--lg" href="mailto:hello@varwent.com">
-                Start a project →
+              <a class="btn btn--primary btn--lg" href="mailto:varwent@gmail.com">
+                Start a project
+                <span aria-hidden="true">→</span>
               </a>
               <a class="btn btn--ghost btn--lg" href="#work">See our work</a>
             </div>
@@ -530,6 +571,20 @@
           <p class="footer__tag">
             Digital services that ship. Web, automation, AI — handled.
           </p>
+          <ul class="footer__contact">
+            <li>
+              <a href="mailto:varwent@gmail.com">
+                <span aria-hidden="true">✉️</span>
+                <span>varwent@gmail.com</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+918874982940">
+                <span aria-hidden="true">📞</span>
+                <span>+91 8874982940</span>
+              </a>
+            </li>
+          </ul>
           <form class="footer__form" data-footer-form>
             <label class="footer__label" for="footer-email">Get project updates</label>
             <div class="footer__field">
