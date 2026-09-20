@@ -245,9 +245,12 @@ ol {
   color: var(--ink);
 }
 .nav__logo {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg);
+  box-shadow: 0 1px 2px rgba(15, 17, 21, 0.06), 0 0 0 1px var(--border);
 }
 .nav__brand-name {
   font-size: 16px;
@@ -342,7 +345,7 @@ ol {
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 6px 12px 6px 8px;
   background: var(--bg-alt);
   border: 1px solid var(--border);
@@ -351,6 +354,12 @@ ol {
   font-weight: 500;
   color: var(--ink-2);
 }
+.badge__sparkle {
+  width: 12px;
+  height: 12px;
+  color: var(--ink);
+  flex-shrink: 0;
+}
 .badge__dot {
   width: 8px;
   height: 8px;
@@ -358,6 +367,7 @@ ol {
   background: #16a34a;
   box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
   animation: pulse 2.4s ease-in-out infinite;
+  flex-shrink: 0;
 }
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18); }
@@ -404,9 +414,11 @@ ol {
   font-size: 14px;
   color: var(--ink-2);
 }
-.hero__bullets li span[aria-hidden] {
-  font-size: 16px;
-  line-height: 1;
+.bullet__icon {
+  width: 16px;
+  height: 16px;
+  color: var(--ink);
+  flex-shrink: 0;
 }
 
 /* hero visual */
@@ -918,29 +930,12 @@ section {
 }
 .member__bio {
   margin-top: 8px;
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 1.5;
   color: var(--ink-2);
   font-weight: 500;
-  text-wrap: balance;
-  max-width: 32ch;
-}
-.member__link {
-  margin-top: 16px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  padding: 6px 14px;
-  border-radius: var(--r-pill);
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  transition-property: background-color, border-color, transform;
-  transition-duration: 160ms;
-}
-.member__link:hover {
-  background: #fff;
-  border-color: var(--border-strong);
-  transform: translateY(-1px);
+  text-wrap: pretty;
+  max-width: 34ch;
 }
 
 /* ============================================
@@ -992,11 +987,15 @@ section {
   width: 52px;
   height: 52px;
   border-radius: 16px;
-  font-size: 26px;
   line-height: 1;
+  color: var(--ink);
   transition-property: transform;
   transition-duration: 360ms;
   transition-timing-function: var(--ease);
+}
+.bento__icon svg {
+  width: 26px;
+  height: 26px;
 }
 .bento__card:hover .bento__icon {
   transform: scale(1.1) rotate(-6deg);
@@ -1176,8 +1175,23 @@ section {
   border-color: var(--border-strong);
 }
 .why__icon {
-  font-size: 28px;
-  line-height: 1;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--bg-alt);
+  color: var(--ink);
+  transition-property: transform;
+  transition-duration: 360ms;
+  transition-timing-function: var(--ease);
+}
+.why__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.why__card:hover .why__icon {
+  transform: scale(1.08) rotate(-4deg);
 }
 .why__title {
   font-size: 18px;
@@ -1475,9 +1489,12 @@ section {
   color: var(--ink);
 }
 .footer__logo img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg);
+  box-shadow: 0 1px 2px rgba(15, 17, 21, 0.06), 0 0 0 1px var(--border);
 }
 
 .footer__tag {
@@ -1505,9 +1522,11 @@ section {
   transition-duration: 180ms;
   transition-timing-function: var(--ease-quick);
 }
-.footer__contact a span[aria-hidden] {
-  font-size: 14px;
-  line-height: 1;
+.contact__icon {
+  width: 15px;
+  height: 15px;
+  color: var(--ink);
+  flex-shrink: 0;
 }
 .footer__contact a:hover {
   color: var(--ink-2);

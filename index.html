@@ -57,7 +57,11 @@
           <div class="hero__copy">
             <span class="badge">
               <span class="badge__dot" aria-hidden="true"></span>
-              <span>✦ Taking on new projects for Q4</span>
+              <svg class="badge__sparkle" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/>
+                <path d="M19 14l.9 3.1L23 18l-3.1.9L19 22l-.9-3.1L15 18l3.1-.9L19 14z"/>
+              </svg>
+              <span>Taking on new projects for Q4</span>
             </span>
 
             <h1 class="hero__title">
@@ -79,9 +83,29 @@
             </div>
 
             <ul class="hero__bullets">
-              <li><span aria-hidden="true">⚡</span> Senior team. No juniors.</li>
-              <li><span aria-hidden="true">🤝</span> One team, start to ship.</li>
-              <li><span aria-hidden="true">🎯</span> Outcome over output.</li>
+              <li>
+                <svg class="bullet__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                Senior team. No juniors.
+              </li>
+              <li>
+                <svg class="bullet__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                </svg>
+                One team, start to ship.
+              </li>
+              <li>
+                <svg class="bullet__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="6"/>
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+                Outcome over output.
+              </li>
             </ul>
           </div>
 
@@ -189,19 +213,6 @@
           <div class="team__grid">
             <article class="member">
               <div class="member__photo-wrap">
-                <img src="assets/partners/Radha kishan profile photo.png" alt="Radhakishan Jangid" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">8+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
-              </div>
-              <h3 class="member__name">Radhakishan Jangid</h3>
-              <p class="member__current"><strong>Software Engineer</strong> at <strong>CacheTech Advisor Solutions</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/radhakishanjangid/" target="_blank" rel="noopener" aria-label="Radhakishan Jangid on LinkedIn">LinkedIn ↗</a>
-            </article>
-
-            <article class="member">
-              <div class="member__photo-wrap">
                 <img src="assets/partners/Nitin Profole photo.png" alt="Nitin Singh" class="member__photo" loading="lazy" />
                 <span class="member__badge">
                   <span class="member__badge-num">8+</span>
@@ -210,7 +221,20 @@
               </div>
               <h3 class="member__name">Nitin Singh</h3>
               <p class="member__current"><strong>Senior Frontend Developer</strong> at <strong>Altudo</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/nitin-u-singh/" target="_blank" rel="noopener" aria-label="Nitin Singh on LinkedIn">LinkedIn ↗</a>
+              <p class="member__bio">Senior Frontend Engineer with 8+ years in React, Next.js, and Sitecore XM Cloud. Ships production-grade frontends with clean code.</p>
+            </article>
+
+            <article class="member">
+              <div class="member__photo-wrap">
+                <img src="assets/partners/Radha kishan profile photo.png" alt="Radhakishan Jangid" class="member__photo" loading="lazy" />
+                <span class="member__badge">
+                  <span class="member__badge-num">8+</span>
+                  <span class="member__badge-label">YOE</span>
+                </span>
+              </div>
+              <h3 class="member__name">Radhakishan Jangid</h3>
+              <p class="member__current"><strong>Software Engineer</strong> at <strong>CacheTech Advisor Solutions</strong></p>
+              <p class="member__bio">8+ years across frontend architecture, full-stack, and SaaS. Engineering leader who ships clean, scalable systems.</p>
             </article>
 
             <article class="member">
@@ -223,7 +247,7 @@
               </div>
               <h3 class="member__name">Nishchal Muradia</h3>
               <p class="member__current"><strong>SDE-3</strong> at <strong>Oracle</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/nishchal-muradia/" target="_blank" rel="noopener" aria-label="Nishchal Muradia on LinkedIn">LinkedIn ↗</a>
+              <p class="member__bio">7+ years on Java, Spring Boot, microservices, and distributed systems. Built search infra at Flipkart. Enterprise-grade backend muscle.</p>
             </article>
 
             <article class="member">
@@ -236,7 +260,7 @@
               </div>
               <h3 class="member__name">Rakesh Gupta</h3>
               <p class="member__current"><strong>Software Engineer</strong> at <strong>Redrob</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/rakesh-gupta29/" target="_blank" rel="noopener" aria-label="Rakesh Gupta on LinkedIn">LinkedIn ↗</a>
+              <p class="member__bio">5+ years in React, Next.js, Node.js, and Golang. Frontend for products with millions of downloads. AI workflows that actually ship.</p>
             </article>
 
             <article class="member">
@@ -249,7 +273,7 @@
               </div>
               <h3 class="member__name">Amit Kumar</h3>
               <p class="member__current"><strong>Software Developer</strong> at <strong>Redrob</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/amit-kumar-93307a219/" target="_blank" rel="noopener" aria-label="Amit Kumar on LinkedIn">LinkedIn ↗</a>
+              <p class="member__bio">3+ years building full-stack at Redrob — backend that scales, agile delivery, and a clean path from intern to SDE.</p>
             </article>
 
             <article class="member">
@@ -262,7 +286,7 @@
               </div>
               <h3 class="member__name">Nitish Patel</h3>
               <p class="member__current"><strong>Software Developer</strong> at <strong>Sosuv</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/nitish-patel009" target="_blank" rel="noopener" aria-label="Nitish Patel on LinkedIn">LinkedIn ↗</a>
+              <p class="member__bio">IIIT grad. 2+ years across Angular, React, FastAPI, and AWS. Frontend + backend with fast turnaround.</p>
             </article>
 
             <article class="member">
@@ -275,7 +299,7 @@
               </div>
               <h3 class="member__name">Shivansh Mehrotra</h3>
               <p class="member__current"><strong>Software Engineer</strong> at <strong>Ev Software Solution</strong></p>
-              <a class="member__link" href="https://www.linkedin.com/in/shivansh-mehrotra-24343023b" target="_blank" rel="noopener" aria-label="Shivansh Mehrotra on LinkedIn">LinkedIn ↗</a>
+              <p class="member__bio">2+ years in QA, delivery, and project management. Reliable apps, thorough testing, structured dev cycles.</p>
             </article>
           </div>
         </div>
@@ -290,7 +314,13 @@
 
           <div class="bento">
             <article class="bento__card" data-tone="blue">
-              <span class="bento__icon" aria-hidden="true">🌐</span>
+              <span class="bento__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                </svg>
+              </span>
               <h3 class="bento__title">Web development</h3>
               <p class="bento__tagline">Fast, accessible sites. Built to last.</p>
               <ul class="bento__list">
@@ -306,7 +336,12 @@
             </article>
 
             <article class="bento__card" data-tone="green">
-              <span class="bento__icon" aria-hidden="true">⚙️</span>
+              <span class="bento__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </span>
               <h3 class="bento__title">Automation</h3>
               <p class="bento__tagline">Wire up the boring. Skip the repetitive work.</p>
               <ul class="bento__list">
@@ -322,7 +357,12 @@
             </article>
 
             <article class="bento__card" data-tone="red">
-              <span class="bento__icon" aria-hidden="true">🧠</span>
+              <span class="bento__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04Z"/>
+                  <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04Z"/>
+                </svg>
+              </span>
               <h3 class="bento__title">AI integrations</h3>
               <p class="bento__tagline">Real AI features. No buzzwords.</p>
               <ul class="bento__list">
@@ -385,7 +425,12 @@
 
           <div class="why__grid">
             <article class="why__card">
-              <span class="why__icon" aria-hidden="true">👤</span>
+              <span class="why__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
               <h3 class="why__title">Senior only</h3>
               <p class="why__body">
                 Everyone you talk to has 3+ years shipping real products. No
@@ -394,13 +439,24 @@
             </article>
 
             <article class="why__card">
-              <span class="why__icon" aria-hidden="true">⚡</span>
+              <span class="why__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </span>
               <h3 class="why__title">Fast turnaround</h3>
               <p class="why__body">Most projects ship in 2–6 weeks. Weeks, not months.</p>
             </article>
 
             <article class="why__card">
-              <span class="why__icon" aria-hidden="true">🤝</span>
+              <span class="why__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                </svg>
+              </span>
               <h3 class="why__title">One team</h3>
               <p class="why__body">
                 Design, dev, and QA under one roof. No subcontractor roulette when
@@ -409,7 +465,13 @@
             </article>
 
             <article class="why__card">
-              <span class="why__icon" aria-hidden="true">🎯</span>
+              <span class="why__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="6"/>
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+              </span>
               <h3 class="why__title">Outcome first</h3>
               <p class="why__body">
                 We measure success by what you ship — not lines of code, not story
@@ -586,13 +648,18 @@
             <ul class="footer__contact">
               <li>
                 <a href="mailto:varwent@gmail.com">
-                  <span aria-hidden="true">✉️</span>
+                  <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect width="20" height="16" x="2" y="4" rx="2"/>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                  </svg>
                   <span>varwent@gmail.com</span>
                 </a>
               </li>
               <li>
                 <a href="tel:+918874982940">
-                  <span aria-hidden="true">📞</span>
+                  <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
                   <span>+91 8874982940</span>
                 </a>
               </li>
