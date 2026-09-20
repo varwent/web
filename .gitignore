@@ -34,3 +34,6 @@ Thumbs.db
 
 # design reference (keep out of prod repo)
 assets/ref.jpeg
+
+# partner photos are now served from ImageKit CDN
+assets/partners/*.png
