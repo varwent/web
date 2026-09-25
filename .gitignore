@@ -28,7 +28,6 @@ Thumbs.db
 *~
 
 # project-local scratch (not part of the site)
-.agents/
 .kilo/
 .claude/
 
