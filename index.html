@@ -160,8 +160,8 @@
               <button
                 class="showreel__sound"
                 type="button"
-                aria-label="Unmute video"
-                aria-pressed="false"
+                aria-label="Mute video"
+                aria-pressed="true"
                 data-showreel-sound
               >
                 <svg class="showreel__icon showreel__icon--off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -842,25 +842,20 @@
 
         <div class="footer__signup">
           <div class="footer__signup-copy">
-            <h4>Get project updates</h4>
-            <p>Occasional notes on what we're shipping. No spam.</p>
+            <h4>Rather write it down?</h4>
+            <p>Send us a note about your project. We reply within 24 hours.</p>
           </div>
-          <form
-            class="footer__form"
-            action="https://formsubmit.co/varwent@gmail.com"
-            method="POST"
-            data-footer-form
+          <a
+            class="btn btn--primary btn--lg footer__mail"
+            href="mailto:varwent@gmail.com?subject=Project%20enquiry%20from%20varwent.com"
           >
-            <input type="hidden" name="_subject" value="New signup from varwent.com" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="text" name="_honey" class="footer__honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <div class="footer__field">
-              <input type="email" name="email" placeholder="you@company.com" autocomplete="email" aria-label="Your email" required />
-              <button type="submit">Join</button>
-            </div>
-            <p class="footer__form-msg" data-footer-msg role="status" aria-live="polite"></p>
-          </form>
+            <svg class="footer__mail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="16" x="2" y="4" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            Send us an email
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
 
         <div class="footer__base">

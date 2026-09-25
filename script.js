@@ -87,24 +87,67 @@
     });
   }
 
-  // Hero showreel — autoplays muted; sound toggle; pauses off-screen
+  // Hero showreel — starts with sound on. Browsers block unmuted autoplay
+  // until the visitor interacts, so fall back to muted and switch the sound
+  // on at the first tap/click/keypress (unless they muted it themselves).
   const video = document.querySelector("[data-showreel]");
   const soundBtn = document.querySelector("[data-showreel-sound]");
   if (video) {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let userMuted = false;
+
+    const syncBtn = () => {
+      if (!soundBtn) return;
+      soundBtn.setAttribute("aria-pressed", String(!video.muted));
+      soundBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+    };
+
+    const play = () => {
+      const wantSound = !userMuted;
+      video.muted = !wantSound;
+      const p = video.play();
+      if (!p || !p.catch) return syncBtn();
+      p.then(syncBtn).catch(() => {
+        if (!wantSound) return syncBtn();
+        video.muted = true;
+        syncBtn();
+        video.play().catch(() => {});
+      });
+    };
+
+    const unlock = (e) => {
+      if (soundBtn && soundBtn.contains(e.target)) return;
+      ["pointerdown", "keydown", "touchend"].forEach((t) =>
+        document.removeEventListener(t, unlock, true)
+      );
+      if (userMuted || !video.muted) return;
+      video.muted = false;
+      video.play().then(syncBtn).catch(() => {
+        video.muted = true;
+        syncBtn();
+      });
+    };
+
     if (reduceMotion) {
       video.removeAttribute("autoplay");
       video.pause();
+      video.muted = false;
       video.controls = true;
       if (soundBtn) soundBtn.hidden = true;
     } else {
-      const tryPlay = () => {
-        const p = video.play();
-        if (p && p.catch) p.catch(() => {});
-      };
+      ["pointerdown", "keydown", "touchend"].forEach((t) =>
+        document.addEventListener(t, unlock, true)
+      );
+      play();
       if ("IntersectionObserver" in window) {
         new IntersectionObserver(
-          ([entry]) => (entry.isIntersecting ? tryPlay() : video.pause()),
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              if (video.paused) play();
+            } else {
+              video.pause();
+            }
+          },
           { threshold: 0.25 }
         ).observe(video);
       }
@@ -113,9 +156,9 @@
     if (soundBtn) {
       soundBtn.addEventListener("click", () => {
         video.muted = !video.muted;
+        userMuted = video.muted;
         if (!video.muted && video.paused) video.play().catch(() => {});
-        soundBtn.setAttribute("aria-pressed", String(!video.muted));
-        soundBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+        syncBtn();
       });
     }
   }
@@ -147,57 +190,6 @@
     if (e.key !== "Escape") return;
     members.forEach((c) => c.dataset.open === "true" && setMember(c, false));
   });
-
-  // Footer signup — posts to FormSubmit (emails varwent@gmail.com, no DB)
-  const form = document.querySelector("[data-footer-form]");
-  const msg = document.querySelector("[data-footer-msg]");
-  if (form && msg) {
-    const input = form.querySelector('input[type="email"]');
-    const submit = form.querySelector('button[type="submit"]');
-    const setMsg = (text, state) => {
-      msg.textContent = text;
-      msg.dataset.state = state || "";
-    };
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!input || !input.checkValidity()) {
-        setMsg("Please enter a valid email.", "error");
-        input && input.focus();
-        return;
-      }
-      if (submit) {
-        submit.disabled = true;
-        submit.textContent = "Joining…";
-      }
-      setMsg("");
-
-      const data = Object.fromEntries(new FormData(form).entries());
-      const endpoint = form.action.replace("formsubmit.co/", "formsubmit.co/ajax/");
-
-      try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(data),
-        });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || String(json.success) !== "true") {
-          throw new Error(json.message || `HTTP ${res.status}`);
-        }
-        setMsg("Thanks — you're on the list.", "success");
-        form.reset();
-      } catch (err) {
-        console.warn("Signup failed:", err);
-        setMsg("Couldn't sign you up just now. Email us at varwent@gmail.com.", "error");
-      } finally {
-        if (submit) {
-          submit.disabled = false;
-          submit.textContent = "Join";
-        }
-      }
-    });
-  }
 
   // Smooth FAQ accordion — eases open/close with height + opacity
   document.querySelectorAll(".faq__item").forEach((item) => {

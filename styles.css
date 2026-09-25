@@ -530,15 +530,21 @@ ol {
 }
 
 /* hero showreel (sits in the right column of hero) */
+/* The video is 9:16, so its width is driven by the height we allow */
 .hero__showreel {
+  --reel-h: min(72vh, 680px);
+  display: flex;
+  justify-content: center;
   width: 100%;
-  max-width: 560px;
-  margin-left: auto;
+}
+@supports (height: 1svh) {
+  .hero__showreel {
+    --reel-h: min(72svh, 680px);
+  }
 }
 @media (max-width: 980px) {
   .hero__showreel {
-    max-width: 100%;
-    margin-left: 0;
+    --reel-h: min(72svh, 640px);
   }
 }
 
@@ -576,6 +582,8 @@ section {
 .showreel__frame {
   position: relative;
   isolation: isolate;
+  width: min(100%, calc(var(--reel-h) * 9 / 16));
+  aspect-ratio: 9 / 16;
   border-radius: var(--r-xl);
   border: 1px solid var(--border);
   background: var(--bg-alt);
@@ -587,9 +595,7 @@ section {
 .showreel__video {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: auto 16 / 9;
-  max-height: 78vh;
+  height: 100%;
   object-fit: cover;
   border-radius: calc(var(--r-xl) - 1px);
   background: var(--bg-alt);
@@ -1688,76 +1694,23 @@ section {
   margin: 0;
 }
 
-.footer__form {
-  width: 100%;
-  max-width: 420px;
-  margin-left: auto;
+.footer__mail {
+  justify-self: end;
 }
 @media (max-width: 880px) {
-  .footer__form {
-    margin-left: 0;
-    max-width: none;
+  .footer__mail {
+    justify-self: start;
   }
 }
-.footer__field {
-  display: flex;
-  gap: 8px;
+@media (max-width: 420px) {
+  .footer__mail {
+    justify-self: stretch;
+  }
 }
-.footer__field input {
-  flex: 1;
-  min-width: 0;
-  padding: 11px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  font: inherit;
-  font-size: 14px;
-  background: #fff;
-  color: var(--ink);
-  transition-property: border-color, box-shadow;
-  transition-duration: 160ms;
-}
-.footer__field input:focus {
-  outline: none;
-  border-color: var(--ink);
-  box-shadow: 0 0 0 4px rgba(15, 17, 21, 0.08);
-}
-.footer__field button {
-  padding: 11px 18px;
-  background: var(--ink);
-  color: #fff;
-  border-radius: var(--r-md);
-  font-weight: 600;
-  font-size: 14px;
-  transition-property: background-color, transform;
-  transition-duration: 160ms;
-}
-.footer__field button:hover {
-  background: #2a2d33;
-}
-.footer__field button:active {
-  transform: scale(0.96);
-}
-.footer__form-msg {
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--pastel-green-ink);
-}
-.footer__form-msg:empty {
-  display: none;
-}
-.footer__form-msg[data-state="error"] {
-  color: var(--pastel-red-ink);
-}
-.footer__field button:disabled {
-  opacity: 0.6;
-  cursor: progress;
-}
-.footer__honey {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
+.footer__mail-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
 
 .footer__col {
