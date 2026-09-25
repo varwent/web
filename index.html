@@ -17,7 +17,10 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     />
 
-    <link rel="icon" href="assets/logo.png" type="image/png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111&amp;tr=w-32,h-32,r-max,f-png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111&amp;tr=w-192,h-192,r-max,f-png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111&amp;tr=w-180,h-180,f-png" />
+    <link rel="preconnect" href="https://ik.imagekit.io" />
     <link rel="stylesheet" href="styles.css" />
 
     <!-- Vercel Web Analytics -->
@@ -32,7 +35,7 @@
     <header class="nav" data-nav>
       <div class="container nav__inner">
         <a class="nav__brand" href="#top" aria-label="Varwent — home">
-          <img src="assets/logo.png" alt="" class="nav__logo" />
+          <img src="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111" alt="" class="nav__logo" width="36" height="36" />
           <span class="nav__brand-name">Varwent</span>
         </a>
 
@@ -44,11 +47,38 @@
           <a href="#faq">FAQs</a>
         </nav>
 
-        <a class="btn btn--primary nav__cta" href="#contact">
-          Let's talk
-          <span aria-hidden="true">→</span>
-        </a>
+        <div class="nav__actions">
+          <a class="btn btn--primary nav__cta" href="#contact">
+            Let's talk
+            <span aria-hidden="true">→</span>
+          </a>
+          <button
+            class="nav__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="nav-menu"
+            data-nav-toggle
+          >
+            <span class="nav__toggle-bar" aria-hidden="true"></span>
+            <span class="nav__toggle-bar" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
+
+      <nav class="nav__menu" id="nav-menu" aria-label="Mobile" data-nav-menu>
+        <div class="container nav__menu-inner">
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#team">Team</a>
+          <a href="#work">Work</a>
+          <a href="#faq">FAQs</a>
+          <a class="btn btn--primary btn--lg nav__menu-cta" href="#contact">
+            Let's talk
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </nav>
     </header>
 
     <main id="main">
@@ -110,14 +140,41 @@
           </div>
 
           <div class="hero__showreel">
-            <div class="showreel__frame" role="img" aria-label="Showreel placeholder">
-              <div class="showreel__pattern" aria-hidden="true"></div>
-              <button class="showreel__play" type="button" aria-label="Play showreel">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 5v14l11-7z" fill="currentColor" />
+            <div class="showreel__frame">
+              <video
+                class="showreel__video"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster="https://ik.imagekit.io/varwent/Videos/VARWENT_landing_video.mp4/ik-thumbnail.jpg"
+                aria-label="Varwent showreel"
+                data-showreel
+              >
+                <source
+                  src="https://ik.imagekit.io/varwent/Videos/VARWENT_landing_video.mp4?updatedAt=1790319121106"
+                  type="video/mp4"
+                />
+              </video>
+              <button
+                class="showreel__sound"
+                type="button"
+                aria-label="Unmute video"
+                aria-pressed="false"
+                data-showreel-sound
+              >
+                <svg class="showreel__icon showreel__icon--off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+                  <line x1="22" y1="9" x2="16" y2="15"/>
+                  <line x1="16" y1="9" x2="22" y2="15"/>
+                </svg>
+                <svg class="showreel__icon showreel__icon--on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
                 </svg>
               </button>
-              <div class="showreel__caption">A minute of what we ship — coming soon</div>
             </div>
           </div>
         </div>
@@ -133,95 +190,267 @@
           </div>
 
           <div class="team__grid">
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Nitin%20Profole%20photo.png?updatedAt=1789909311508" alt="Nitin Singh" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">8+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-nitin" aria-label="Nitin Singh: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Nitin%20Profole%20photo.png?updatedAt=1789909311508" alt="Nitin Singh" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">8+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Nitin Singh</h3>
+                <p class="member__current"><strong>Senior Frontend Developer</strong> at <strong>Altudo</strong></p>
               </div>
-              <h3 class="member__name">Nitin Singh</h3>
-              <p class="member__current"><strong>Senior Frontend Developer</strong> at <strong>Altudo</strong></p>
-              <p class="member__bio">Senior Frontend Engineer with 8+ years in React, Next.js, and Sitecore XM Cloud. Ships production-grade frontends with clean code.</p>
+              <div class="member__face member__face--back" id="xp-nitin" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Nitin Singh</span>
+                  <span class="member__xp-yoe">8+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">Senior Frontend Developer</span>
+                    <span class="member__role-meta"><span>Altudo</span><span class="member__role-when">2023 – now</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">React.js Consultant</span>
+                    <span class="member__role-meta"><span>Naico ITS</span><span class="member__role-when">2023</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">React Developer</span>
+                    <span class="member__role-meta"><span>Upwork · Freelance</span><span class="member__role-when">2022 – 23</span></span>
+                  </li>
+                </ol>
+                <p class="member__earlier">Earlier: Innovez One, Digiryte, Encora + 4 more</p>
+                <ul class="member__stack"><li>React</li><li>Next.js</li><li>TypeScript</li><li>Sitecore XM Cloud</li></ul>
+              </div>
             </article>
 
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Radha%20kishan%20profile%20photo.png?updatedAt=1789909322832" alt="Radhakishan Jangid" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">8+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-radhakishan" aria-label="Radhakishan Jangid: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Radha%20kishan%20profile%20photo.png?updatedAt=1789909322832" alt="Radhakishan Jangid" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">8+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Radhakishan Jangid</h3>
+                <p class="member__current"><strong>Software Engineer</strong> at <strong>CacheTech Advisor Solutions</strong></p>
               </div>
-              <h3 class="member__name">Radhakishan Jangid</h3>
-              <p class="member__current"><strong>Software Engineer</strong> at <strong>CacheTech Advisor Solutions</strong></p>
-              <p class="member__bio">8+ years across frontend architecture, full-stack, and SaaS. Engineering leader who ships clean, scalable systems.</p>
+              <div class="member__face member__face--back" id="xp-radhakishan" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Radhakishan Jangid</span>
+                  <span class="member__xp-yoe">8+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">Software Engineer</span>
+                    <span class="member__role-meta"><span>CacheTech Advisor Solutions</span><span class="member__role-when">2024 – now</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Sr. Engineering Manager</span>
+                    <span class="member__role-meta"><span>EduBridge Learning</span><span class="member__role-when">2022 – 24</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Software Developer</span>
+                    <span class="member__role-meta"><span>TechStalwarts</span><span class="member__role-when">2020 – 22</span></span>
+                  </li>
+                </ol>
+                <p class="member__earlier">Earlier: Innovins Softtech, Impaq Technologies</p>
+                <ul class="member__stack"><li>React</li><li>React Native</li><li>PHP</li><li>SaaS</li></ul>
+              </div>
             </article>
 
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Nischal%20Profile%20photo.png?updatedAt=1789909321032" alt="Nishchal Muradia" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">7+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-nishchal" aria-label="Nishchal Muradia: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Nischal%20Profile%20photo.png?updatedAt=1789909321032" alt="Nishchal Muradia" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">7+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Nishchal Muradia</h3>
+                <p class="member__current"><strong>SDE-3</strong> at <strong>Oracle</strong></p>
               </div>
-              <h3 class="member__name">Nishchal Muradia</h3>
-              <p class="member__current"><strong>SDE-3</strong> at <strong>Oracle</strong></p>
-              <p class="member__bio">7+ years on Java, Spring Boot, microservices, and distributed systems. Built search infra at Flipkart. Enterprise-grade backend muscle.</p>
+              <div class="member__face member__face--back" id="xp-nishchal" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Nishchal Muradia</span>
+                  <span class="member__xp-yoe">7+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">SDE-3</span>
+                    <span class="member__role-meta"><span>Oracle</span><span class="member__role-when">2024 – now</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Senior Engineer</span>
+                    <span class="member__role-meta"><span>Flipkart · via Nagarro</span><span class="member__role-when">2021 – 24</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Software Engineer</span>
+                    <span class="member__role-meta"><span>Motherson (MIND)</span><span class="member__role-when">2019 – 21</span></span>
+                  </li>
+                </ol>
+                <p class="member__earlier">Also: Backend Instructor at Fynd (2025)</p>
+                <ul class="member__stack"><li>Java</li><li>Spring Boot</li><li>Kafka</li><li>Kubernetes</li></ul>
+              </div>
             </article>
 
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Rakesh%20Profile%20photo.png?updatedAt=1789909322232" alt="Rakesh Gupta" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">5+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-rakesh" aria-label="Rakesh Gupta: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Rakesh%20Profile%20photo.png?updatedAt=1789909322232" alt="Rakesh Gupta" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">5+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Rakesh Gupta</h3>
+                <p class="member__current"><strong>Software Engineer</strong> at <strong>Redrob</strong></p>
               </div>
-              <h3 class="member__name">Rakesh Gupta</h3>
-              <p class="member__current"><strong>Software Engineer</strong> at <strong>Redrob</strong></p>
-              <p class="member__bio">5+ years in React, Next.js, Node.js, and Golang. Frontend for products with millions of downloads. AI workflows that actually ship.</p>
+              <div class="member__face member__face--back" id="xp-rakesh" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Rakesh Gupta</span>
+                  <span class="member__xp-yoe">5+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">Software Engineer 1</span>
+                    <span class="member__role-meta"><span>Redrob</span><span class="member__role-when">2025 – now</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Associate Frontend Engineer</span>
+                    <span class="member__role-meta"><span>Redrob</span><span class="member__role-when">2024 – 25</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Frontend Developer</span>
+                    <span class="member__role-meta"><span>Blacksof</span><span class="member__role-when">2022 – 24</span></span>
+                  </li>
+                </ol>
+                <p class="member__earlier">Earlier: Freelance web developer</p>
+                <ul class="member__stack"><li>React</li><li>Next.js</li><li>Node.js</li><li>Golang</li></ul>
+              </div>
             </article>
 
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Amit%20Profile%20photo.png?updatedAt=1789909318845" alt="Amit Kumar" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">3+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-amit" aria-label="Amit Kumar: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Amit%20Profile%20photo.png?updatedAt=1789909318845" alt="Amit Kumar" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">3+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Amit Kumar</h3>
+                <p class="member__current"><strong>Software Developer</strong> at <strong>Redrob</strong></p>
               </div>
-              <h3 class="member__name">Amit Kumar</h3>
-              <p class="member__current"><strong>Software Developer</strong> at <strong>Redrob</strong></p>
-              <p class="member__bio">3+ years building full-stack at Redrob — backend that scales, agile delivery, and a clean path from intern to SDE.</p>
+              <div class="member__face member__face--back" id="xp-amit" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Amit Kumar</span>
+                  <span class="member__xp-yoe">3+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">Software Developer 1</span>
+                    <span class="member__role-meta"><span>Redrob</span><span class="member__role-when">2026 – now</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Associate Software Developer</span>
+                    <span class="member__role-meta"><span>Redrob</span><span class="member__role-when">2024 – 26</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Backend Developer · Intern</span>
+                    <span class="member__role-meta"><span>Redrob</span><span class="member__role-when">2024</span></span>
+                  </li>
+                </ol>
+                <ul class="member__stack"><li>Python</li><li>Node.js</li><li>REST APIs</li><li>SQL</li></ul>
+              </div>
             </article>
 
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Nitish%20profile%20photo.png?updatedAt=1789909322958" alt="Nitish Patel" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">2+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-nitish" aria-label="Nitish Patel: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Nitish%20profile%20photo.png?updatedAt=1789909322958" alt="Nitish Patel" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">2+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Nitish Patel</h3>
+                <p class="member__current"><strong>Software Developer</strong> at <strong>Sosuv</strong></p>
               </div>
-              <h3 class="member__name">Nitish Patel</h3>
-              <p class="member__current"><strong>Software Developer</strong> at <strong>Sosuv</strong></p>
-              <p class="member__bio">IIIT grad. 2+ years across Angular, React, FastAPI, and AWS. Frontend + backend with fast turnaround.</p>
+              <div class="member__face member__face--back" id="xp-nitish" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Nitish Patel</span>
+                  <span class="member__xp-yoe">2+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">Software Developer</span>
+                    <span class="member__role-meta"><span>Sosuv</span><span class="member__role-when">2025 – now</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Software Engineer</span>
+                    <span class="member__role-meta"><span>Impulsive Web</span><span class="member__role-when">2024 – 25</span></span>
+                  </li>
+                  <li class="member__role">
+                    <span class="member__role-title">Software Developer · Intern</span>
+                    <span class="member__role-meta"><span>Impulsive Web</span><span class="member__role-when">2024</span></span>
+                  </li>
+                </ol>
+                <ul class="member__stack"><li>Angular</li><li>React</li><li>FastAPI</li><li>AWS</li></ul>
+              </div>
             </article>
 
-            <article class="member">
-              <div class="member__photo-wrap">
-                <img src="https://ik.imagekit.io/varwent/web/Shrivansh%20profile%20photo.png?updatedAt=1789909320576" alt="Shivansh Mehrotra" class="member__photo" loading="lazy" />
-                <span class="member__badge">
-                  <span class="member__badge-num">2+</span>
-                  <span class="member__badge-label">YOE</span>
-                </span>
+            <article class="member" data-member>
+              <button class="member__toggle" type="button" aria-expanded="false" aria-controls="xp-shivansh" aria-label="Shivansh Mehrotra: show work experience">
+                <span class="member__hint" aria-hidden="true"></span>
+              </button>
+              <div class="member__face member__face--front">
+                <div class="member__photo-wrap">
+                  <img src="https://ik.imagekit.io/varwent/web/Shrivansh%20profile%20photo.png?updatedAt=1789909320576" alt="Shivansh Mehrotra" class="member__photo" width="96" height="96" loading="lazy" />
+                  <span class="member__badge">
+                    <span class="member__badge-num">2+</span>
+                    <span class="member__badge-label">YOE</span>
+                  </span>
+                </div>
+                <h3 class="member__name">Shivansh Mehrotra</h3>
+                <p class="member__current"><strong>Software Engineer</strong> at <strong>Ev Software Solution</strong></p>
               </div>
-              <h3 class="member__name">Shivansh Mehrotra</h3>
-              <p class="member__current"><strong>Software Engineer</strong> at <strong>Ev Software Solution</strong></p>
-              <p class="member__bio">2+ years in QA, delivery, and project management. Reliable apps, thorough testing, structured dev cycles.</p>
+              <div class="member__face member__face--back" id="xp-shivansh" aria-hidden="true" inert>
+                <p class="member__xp-head">
+                  <span class="member__xp-name">Shivansh Mehrotra</span>
+                  <span class="member__xp-yoe">2+ yrs</span>
+                </p>
+                <ol class="member__timeline">
+                  <li class="member__role">
+                    <span class="member__role-title">Software Engineer</span>
+                    <span class="member__role-meta"><span>Ev Software Solution</span><span class="member__role-when">2024 – now</span></span>
+                  </li>
+                </ol>
+                <p class="member__earlier">Owns QA, delivery and project management</p>
+                <ul class="member__stack"><li>QA &amp; Testing</li><li>Agile</li><li>Project management</li></ul>
+              </div>
             </article>
           </div>
         </div>
@@ -493,8 +722,9 @@
                 <span class="faq__icon" aria-hidden="true"></span>
               </summary>
               <div class="faq__body">
-                Project-based, fixed scope. Most marketing sites land between
-                $5k–$15k. Custom apps and AI work are quoted after the brief call.
+                Project-based, fixed scope. Projects land anywhere between
+                $200 and $15k — a quick landing page sits at the low end, custom
+                apps and AI work at the top. Exact quote after the brief call.
               </div>
             </details>
 
@@ -561,7 +791,7 @@
         <div class="footer__grid">
           <div class="footer__brand">
             <a class="footer__logo" href="#top" aria-label="Varwent — home">
-              <img src="assets/logo.png" alt="" />
+              <img src="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111" alt="" width="36" height="36" loading="lazy" />
               <span>Varwent</span>
             </a>
             <p class="footer__tag">
@@ -615,12 +845,21 @@
             <h4>Get project updates</h4>
             <p>Occasional notes on what we're shipping. No spam.</p>
           </div>
-          <form class="footer__form" data-footer-form>
+          <form
+            class="footer__form"
+            action="https://formsubmit.co/varwent@gmail.com"
+            method="POST"
+            data-footer-form
+          >
+            <input type="hidden" name="_subject" value="New signup from varwent.com" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" class="footer__honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <div class="footer__field">
-              <input type="email" placeholder="you@company.com" autocomplete="email" aria-label="Your email" required />
+              <input type="email" name="email" placeholder="you@company.com" autocomplete="email" aria-label="Your email" required />
               <button type="submit">Join</button>
             </div>
-            <p class="footer__form-msg" data-footer-msg hidden>Thanks — we'll be in touch.</p>
+            <p class="footer__form-msg" data-footer-msg role="status" aria-live="polite"></p>
           </form>
         </div>
 

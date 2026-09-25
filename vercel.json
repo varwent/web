@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/favicon.ico",
+      "destination": "https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111&tr=w-48,h-48,r-max,f-png",
+      "permanent": false
+    }
+  ]
+}
