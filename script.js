@@ -57,17 +57,139 @@
     els.forEach((el) => el.classList.add("is-visible"));
   }
 
-  const form = document.querySelector("[data-footer-form]");
-  const msg = document.querySelector("[data-footer-msg]");
-  if (form && msg) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const input = form.querySelector("input");
-      if (!input || !input.checkValidity()) return;
-      msg.hidden = false;
-      input.value = "";
+  // Mobile menu
+  const navToggle = document.querySelector("[data-nav-toggle]");
+  const navMenu = document.querySelector("[data-nav-menu]");
+  if (nav && navToggle && navMenu) {
+    const setMenu = (open) => {
+      nav.dataset.menuOpen = open ? "true" : "false";
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    };
+    setMenu(false);
+    navToggle.addEventListener("click", () => {
+      setMenu(nav.dataset.menuOpen !== "true");
+    });
+    navMenu.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => setMenu(false));
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && nav.dataset.menuOpen === "true") {
+        setMenu(false);
+        navToggle.focus();
+      }
+    });
+    document.addEventListener("click", (e) => {
+      if (nav.dataset.menuOpen === "true" && !nav.contains(e.target)) setMenu(false);
+    });
+    window.matchMedia("(min-width: 821px)").addEventListener("change", (e) => {
+      if (e.matches) setMenu(false);
     });
   }
+
+  // Hero showreel — starts with sound on. Browsers block unmuted autoplay
+  // until the visitor interacts, so fall back to muted and switch the sound
+  // on at the first tap/click/keypress (unless they muted it themselves).
+  const video = document.querySelector("[data-showreel]");
+  const soundBtn = document.querySelector("[data-showreel-sound]");
+  if (video) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let userMuted = false;
+
+    const syncBtn = () => {
+      if (!soundBtn) return;
+      soundBtn.setAttribute("aria-pressed", String(!video.muted));
+      soundBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+    };
+
+    const play = () => {
+      const wantSound = !userMuted;
+      video.muted = !wantSound;
+      const p = video.play();
+      if (!p || !p.catch) return syncBtn();
+      p.then(syncBtn).catch(() => {
+        if (!wantSound) return syncBtn();
+        video.muted = true;
+        syncBtn();
+        video.play().catch(() => {});
+      });
+    };
+
+    const unlock = (e) => {
+      if (soundBtn && soundBtn.contains(e.target)) return;
+      ["pointerdown", "keydown", "touchend"].forEach((t) =>
+        document.removeEventListener(t, unlock, true)
+      );
+      if (userMuted || !video.muted) return;
+      video.muted = false;
+      video.play().then(syncBtn).catch(() => {
+        video.muted = true;
+        syncBtn();
+      });
+    };
+
+    if (reduceMotion) {
+      video.removeAttribute("autoplay");
+      video.pause();
+      video.muted = false;
+      video.controls = true;
+      if (soundBtn) soundBtn.hidden = true;
+    } else {
+      ["pointerdown", "keydown", "touchend"].forEach((t) =>
+        document.addEventListener(t, unlock, true)
+      );
+      play();
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              if (video.paused) play();
+            } else {
+              video.pause();
+            }
+          },
+          { threshold: 0.25 }
+        ).observe(video);
+      }
+    }
+
+    if (soundBtn) {
+      soundBtn.addEventListener("click", () => {
+        video.muted = !video.muted;
+        userMuted = video.muted;
+        if (!video.muted && video.paused) video.play().catch(() => {});
+        syncBtn();
+      });
+    }
+  }
+
+  // Team cards — tap to swap the front for a short work history
+  const members = Array.from(document.querySelectorAll("[data-member]"));
+  const setMember = (card, open) => {
+    const btn = card.querySelector(".member__toggle");
+    const front = card.querySelector(".member__face--front");
+    const back = card.querySelector(".member__face--back");
+    card.dataset.open = open ? "true" : "false";
+    if (btn) btn.setAttribute("aria-expanded", String(open));
+    [[back, open], [front, !open]].forEach(([face, visible]) => {
+      if (!face) return;
+      face.inert = !visible;
+      face.setAttribute("aria-hidden", String(!visible));
+    });
+  };
+  members.forEach((card) => {
+    const btn = card.querySelector(".member__toggle");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      const open = card.dataset.open !== "true";
+      if (open) members.forEach((c) => c !== card && c.dataset.open === "true" && setMember(c, false));
+      setMember(card, open);
+    });
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    members.forEach((c) => c.dataset.open === "true" && setMember(c, false));
+  });
 
   // Smooth FAQ accordion — eases open/close with height + opacity
   document.querySelectorAll(".faq__item").forEach((item) => {
