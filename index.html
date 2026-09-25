@@ -157,24 +157,45 @@
                   type="video/mp4"
                 />
               </video>
-              <button
-                class="showreel__sound"
-                type="button"
-                aria-label="Mute video"
-                aria-pressed="true"
-                data-showreel-sound
-              >
-                <svg class="showreel__icon showreel__icon--off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M11 5 6 9H2v6h4l5 4V5z"/>
-                  <line x1="22" y1="9" x2="16" y2="15"/>
-                  <line x1="16" y1="9" x2="22" y2="15"/>
-                </svg>
-                <svg class="showreel__icon showreel__icon--on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M11 5 6 9H2v6h4l5 4V5z"/>
-                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                </svg>
-              </button>
+              <div class="showreel__bar" data-showreel-bar>
+                <button class="showreel__btn" type="button" aria-label="Pause video" aria-pressed="true" data-showreel-play>
+                  <svg class="showreel__icon showreel__icon--off" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/>
+                  </svg>
+                  <svg class="showreel__icon showreel__icon--on" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <rect x="6" y="5" width="4" height="14" rx="1"/>
+                    <rect x="14" y="5" width="4" height="14" rx="1"/>
+                  </svg>
+                </button>
+                <button class="showreel__btn" type="button" aria-label="Restart video" data-showreel-restart>
+                  <svg class="showreel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+                    <path d="M3 3v5h5"/>
+                  </svg>
+                </button>
+                <input
+                  class="showreel__timeline"
+                  type="range"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  value="0"
+                  aria-label="Video timeline"
+                  data-showreel-seek
+                />
+                <button class="showreel__btn" type="button" aria-label="Mute video" aria-pressed="true" data-showreel-sound>
+                  <svg class="showreel__icon showreel__icon--off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+                    <line x1="22" y1="9" x2="16" y2="15"/>
+                    <line x1="16" y1="9" x2="22" y2="15"/>
+                  </svg>
+                  <svg class="showreel__icon showreel__icon--on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

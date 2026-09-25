@@ -609,40 +609,58 @@ section {
   }
 }
 
-.showreel__sound {
+/* Control bar: play/pause, restart, timeline, sound */
+.showreel__bar {
   position: absolute;
-  right: 14px;
-  bottom: 14px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
-  width: 40px;
-  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 36px 10px 10px;
+  color: #fff;
+  background: linear-gradient(to top, rgba(15, 17, 21, 0.55), rgba(15, 17, 21, 0));
+  transition-property: opacity, transform;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-quick);
+}
+/* Mouse users: bar fades out while playing, back on hover/focus/pause */
+@media (hover: hover) {
+  .showreel__frame[data-playing="true"]:not(:hover):not(:focus-within) .showreel__bar {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.showreel__btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   color: #fff;
-  background: rgba(15, 17, 21, 0.55);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
   transition-property: background-color, transform;
-  transition-duration: 160ms;
+  transition-duration: 150ms;
   transition-timing-function: var(--ease-quick);
 }
-.showreel__sound::before {
-  /* larger hit area than the visible circle */
-  content: "";
-  position: absolute;
-  inset: -4px;
+@media (hover: hover) {
+  .showreel__btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
 }
-.showreel__sound:hover {
-  background: rgba(15, 17, 21, 0.72);
-}
-.showreel__sound:active {
+.showreel__btn:active {
   transform: scale(0.96);
 }
-.showreel__sound[hidden] {
-  display: none;
+.showreel__btn:focus-visible {
+  outline-color: #fff;
+  outline-offset: 0;
+  border-radius: 50%;
 }
+
 .showreel__icon {
   grid-area: 1 / 1;
   width: 18px;
@@ -652,15 +670,86 @@ section {
   transition-timing-function: var(--ease-quick);
 }
 .showreel__icon--on,
-.showreel__sound[aria-pressed="true"] .showreel__icon--off {
+.showreel__btn[aria-pressed="true"] .showreel__icon--off {
   opacity: 0;
   transform: scale(0.25);
   filter: blur(4px);
 }
-.showreel__sound[aria-pressed="true"] .showreel__icon--on {
+.showreel__btn[aria-pressed="true"] .showreel__icon--on {
   opacity: 1;
   transform: scale(1);
   filter: blur(0);
+}
+
+/* Timeline: thin track, fill driven by --p (0–100%) */
+.showreel__timeline {
+  --p: 0%;
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  margin: 0 6px;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.showreel__timeline:focus-visible {
+  outline: none;
+}
+.showreel__timeline::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #fff var(--p), rgba(255, 255, 255, 0.32) var(--p));
+}
+.showreel__timeline::-moz-range-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #fff var(--p), rgba(255, 255, 255, 0.32) var(--p));
+}
+.showreel__timeline::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4.5px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 17, 21, 0.3);
+  transition-property: transform;
+  transition-duration: 150ms;
+  transition-timing-function: var(--ease-quick);
+}
+.showreel__timeline::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 17, 21, 0.3);
+}
+.showreel__timeline:hover::-webkit-slider-thumb,
+.showreel__timeline:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+.showreel__timeline:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.45);
+}
+.showreel__timeline:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 380px) {
+  .showreel__bar {
+    padding: 28px 6px 6px;
+  }
+  .showreel__btn {
+    width: 32px;
+    height: 32px;
+  }
+  .showreel__icon {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 /* ============================================

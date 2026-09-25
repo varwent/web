@@ -91,26 +91,68 @@
   // until the visitor interacts, so fall back to muted and switch the sound
   // on at the first tap/click/keypress (unless they muted it themselves).
   const video = document.querySelector("[data-showreel]");
-  const soundBtn = document.querySelector("[data-showreel-sound]");
   if (video) {
+    const frame = video.closest(".showreel__frame");
+    const playBtn = document.querySelector("[data-showreel-play]");
+    const restartBtn = document.querySelector("[data-showreel-restart]");
+    const seek = document.querySelector("[data-showreel-seek]");
+    const soundBtn = document.querySelector("[data-showreel-sound]");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let userMuted = false;
+    let userPaused = reduceMotion;
+    let scrubbing = false;
 
-    const syncBtn = () => {
+    const fmt = (t) => {
+      t = Math.max(0, Math.floor(t || 0));
+      return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
+    };
+
+    const syncSound = () => {
       if (!soundBtn) return;
       soundBtn.setAttribute("aria-pressed", String(!video.muted));
       soundBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
     };
 
+    const syncPlay = () => {
+      const playing = !video.paused && !video.ended;
+      if (frame) frame.dataset.playing = String(playing);
+      if (!playBtn) return;
+      playBtn.setAttribute("aria-pressed", String(playing));
+      playBtn.setAttribute("aria-label", playing ? "Pause video" : "Play video");
+    };
+
+    const syncSeek = () => {
+      if (!seek || scrubbing) return;
+      const d = video.duration;
+      const ratio = d ? video.currentTime / d : 0;
+      seek.value = String(Math.round(ratio * 1000));
+      seek.style.setProperty("--p", `${ratio * 100}%`);
+      seek.setAttribute("aria-valuetext", `${fmt(video.currentTime)} of ${fmt(d)}`);
+    };
+
+    // Smooth timeline while playing (timeupdate alone only fires ~4×/s)
+    let raf = 0;
+    const tick = () => {
+      syncSeek();
+      raf = video.paused ? 0 : requestAnimationFrame(tick);
+    };
+    video.addEventListener("play", () => {
+      syncPlay();
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+    video.addEventListener("pause", syncPlay);
+    video.addEventListener("ended", syncPlay);
+    ["timeupdate", "loadedmetadata", "seeked"].forEach((t) => video.addEventListener(t, syncSeek));
+    video.addEventListener("volumechange", syncSound);
+
     const play = () => {
       const wantSound = !userMuted;
       video.muted = !wantSound;
       const p = video.play();
-      if (!p || !p.catch) return syncBtn();
-      p.then(syncBtn).catch(() => {
-        if (!wantSound) return syncBtn();
+      if (!p || !p.catch) return;
+      p.catch(() => {
+        if (!wantSound) return;
         video.muted = true;
-        syncBtn();
         video.play().catch(() => {});
       });
     };
@@ -120,11 +162,10 @@
       ["pointerdown", "keydown", "touchend"].forEach((t) =>
         document.removeEventListener(t, unlock, true)
       );
-      if (userMuted || !video.muted) return;
+      if (userMuted || !video.muted || video.paused) return;
       video.muted = false;
-      video.play().then(syncBtn).catch(() => {
+      video.play().catch(() => {
         video.muted = true;
-        syncBtn();
       });
     };
 
@@ -132,35 +173,76 @@
       video.removeAttribute("autoplay");
       video.pause();
       video.muted = false;
-      video.controls = true;
-      if (soundBtn) soundBtn.hidden = true;
     } else {
       ["pointerdown", "keydown", "touchend"].forEach((t) =>
         document.addEventListener(t, unlock, true)
       );
       play();
-      if ("IntersectionObserver" in window) {
-        new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting) {
-              if (video.paused) play();
-            } else {
-              video.pause();
-            }
-          },
-          { threshold: 0.25 }
-        ).observe(video);
-      }
+    }
+
+    // Pause off-screen; resume on return unless the visitor paused it
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) video.pause();
+          else if (video.paused && !userPaused) play();
+        },
+        { threshold: 0.25 }
+      ).observe(video);
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener("click", () => {
+        if (video.paused || video.ended) {
+          userPaused = false;
+          play();
+        } else {
+          userPaused = true;
+          video.pause();
+        }
+      });
+    }
+
+    if (restartBtn) {
+      restartBtn.addEventListener("click", () => {
+        video.currentTime = 0;
+        userPaused = false;
+        syncSeek();
+        play();
+      });
+    }
+
+    if (seek) {
+      const seekTo = () => {
+        const d = video.duration;
+        if (!d) return;
+        const ratio = Number(seek.value) / 1000;
+        video.currentTime = ratio * d;
+        seek.style.setProperty("--p", `${ratio * 100}%`);
+        seek.setAttribute("aria-valuetext", `${fmt(ratio * d)} of ${fmt(d)}`);
+      };
+      seek.addEventListener("pointerdown", () => (scrubbing = true));
+      seek.addEventListener("input", seekTo);
+      const endScrub = () => {
+        scrubbing = false;
+        syncSeek();
+      };
+      seek.addEventListener("pointerup", endScrub);
+      seek.addEventListener("pointercancel", endScrub);
+      seek.addEventListener("change", endScrub);
     }
 
     if (soundBtn) {
       soundBtn.addEventListener("click", () => {
         video.muted = !video.muted;
         userMuted = video.muted;
-        if (!video.muted && video.paused) video.play().catch(() => {});
-        syncBtn();
+        if (!video.muted && video.paused && !userPaused) video.play().catch(() => {});
       });
     }
+
+    syncPlay();
+    syncSound();
+    syncSeek();
   }
 
   // Team cards — tap to swap the front for a short work history
