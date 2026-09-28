@@ -143,22 +143,27 @@
             <div class="showreel__frame">
               <video
                 class="showreel__video"
-                autoplay
-                muted
                 loop
                 playsinline
                 preload="metadata"
+                tabindex="-1"
                 poster="https://ik.imagekit.io/varwent/Videos/VARWENT_landing_video.mp4/ik-thumbnail.jpg"
                 aria-label="Varwent showreel"
                 data-showreel
               >
                 <source
-                  src="https://ik.imagekit.io/varwent/Videos/VARWENT_landing_video.mp4?updatedAt=1790319121106"
+                  src="https://ik.imagekit.io/varwent/Videos/VARWENT_landing_video.mp4?updatedAt=1790319121106#t=0.1"
                   type="video/mp4"
                 />
               </video>
+              <button class="showreel__start" type="button" data-showreel-start>
+                <span class="showreel__start-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/></svg>
+                </span>
+                <span class="showreel__start-label">Play video</span>
+              </button>
               <div class="showreel__bar" data-showreel-bar>
-                <button class="showreel__btn" type="button" aria-label="Pause video" aria-pressed="true" data-showreel-play>
+                <button class="showreel__btn" type="button" aria-label="Play video" aria-pressed="false" data-showreel-play>
                   <svg class="showreel__icon showreel__icon--off" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/>
                   </svg>
@@ -910,79 +915,40 @@
           <div class="talk__field">
             <label class="talk__label" for="talk-phone">Phone</label>
             <div class="talk__phone">
-              <div class="talk__code">
-                <select name="phoneCountry" aria-label="Country code" autocomplete="tel-country-code" data-talk-country>
-                    <option value="IN" data-dial="+91" selected>India (+91)</option>
-                    <option value="US" data-dial="+1">United States (+1)</option>
-                    <option value="GB" data-dial="+44">United Kingdom (+44)</option>
-                    <option value="AE" data-dial="+971">United Arab Emirates (+971)</option>
-                    <option value="CA" data-dial="+1">Canada (+1)</option>
-                    <option value="AU" data-dial="+61">Australia (+61)</option>
-                    <option value="SG" data-dial="+65">Singapore (+65)</option>
-                    <option value="DE" data-dial="+49">Germany (+49)</option>
-                    <option disabled>──────────</option>
-                    <option value="AF" data-dial="+93">Afghanistan (+93)</option>
-                    <option value="AR" data-dial="+54">Argentina (+54)</option>
-                    <option value="AT" data-dial="+43">Austria (+43)</option>
-                    <option value="BH" data-dial="+973">Bahrain (+973)</option>
-                    <option value="BD" data-dial="+880">Bangladesh (+880)</option>
-                    <option value="BE" data-dial="+32">Belgium (+32)</option>
-                    <option value="BT" data-dial="+975">Bhutan (+975)</option>
-                    <option value="BR" data-dial="+55">Brazil (+55)</option>
-                    <option value="CL" data-dial="+56">Chile (+56)</option>
-                    <option value="CN" data-dial="+86">China (+86)</option>
-                    <option value="CO" data-dial="+57">Colombia (+57)</option>
-                    <option value="CZ" data-dial="+420">Czechia (+420)</option>
-                    <option value="DK" data-dial="+45">Denmark (+45)</option>
-                    <option value="EG" data-dial="+20">Egypt (+20)</option>
-                    <option value="FI" data-dial="+358">Finland (+358)</option>
-                    <option value="FR" data-dial="+33">France (+33)</option>
-                    <option value="GH" data-dial="+233">Ghana (+233)</option>
-                    <option value="GR" data-dial="+30">Greece (+30)</option>
-                    <option value="HK" data-dial="+852">Hong Kong (+852)</option>
-                    <option value="HU" data-dial="+36">Hungary (+36)</option>
-                    <option value="ID" data-dial="+62">Indonesia (+62)</option>
-                    <option value="IE" data-dial="+353">Ireland (+353)</option>
-                    <option value="IL" data-dial="+972">Israel (+972)</option>
-                    <option value="IT" data-dial="+39">Italy (+39)</option>
-                    <option value="JP" data-dial="+81">Japan (+81)</option>
-                    <option value="JO" data-dial="+962">Jordan (+962)</option>
-                    <option value="KE" data-dial="+254">Kenya (+254)</option>
-                    <option value="KW" data-dial="+965">Kuwait (+965)</option>
-                    <option value="MY" data-dial="+60">Malaysia (+60)</option>
-                    <option value="MV" data-dial="+960">Maldives (+960)</option>
-                    <option value="MU" data-dial="+230">Mauritius (+230)</option>
-                    <option value="MX" data-dial="+52">Mexico (+52)</option>
-                    <option value="MA" data-dial="+212">Morocco (+212)</option>
-                    <option value="NP" data-dial="+977">Nepal (+977)</option>
-                    <option value="NL" data-dial="+31">Netherlands (+31)</option>
-                    <option value="NZ" data-dial="+64">New Zealand (+64)</option>
-                    <option value="NG" data-dial="+234">Nigeria (+234)</option>
-                    <option value="NO" data-dial="+47">Norway (+47)</option>
-                    <option value="OM" data-dial="+968">Oman (+968)</option>
-                    <option value="PK" data-dial="+92">Pakistan (+92)</option>
-                    <option value="PH" data-dial="+63">Philippines (+63)</option>
-                    <option value="PL" data-dial="+48">Poland (+48)</option>
-                    <option value="PT" data-dial="+351">Portugal (+351)</option>
-                    <option value="QA" data-dial="+974">Qatar (+974)</option>
-                    <option value="RO" data-dial="+40">Romania (+40)</option>
-                    <option value="SA" data-dial="+966">Saudi Arabia (+966)</option>
-                    <option value="ZA" data-dial="+27">South Africa (+27)</option>
-                    <option value="KR" data-dial="+82">South Korea (+82)</option>
-                    <option value="ES" data-dial="+34">Spain (+34)</option>
-                    <option value="LK" data-dial="+94">Sri Lanka (+94)</option>
-                    <option value="SE" data-dial="+46">Sweden (+46)</option>
-                    <option value="CH" data-dial="+41">Switzerland (+41)</option>
-                    <option value="TW" data-dial="+886">Taiwan (+886)</option>
-                    <option value="TZ" data-dial="+255">Tanzania (+255)</option>
-                    <option value="TH" data-dial="+66">Thailand (+66)</option>
-                    <option value="TR" data-dial="+90">Türkiye (+90)</option>
-                    <option value="UG" data-dial="+256">Uganda (+256)</option>
-                    <option value="UA" data-dial="+380">Ukraine (+380)</option>
-                    <option value="VN" data-dial="+84">Vietnam (+84)</option>
-                </select>
-                <span class="talk__code-value" aria-hidden="true" data-talk-dial>+91</span>
-                <svg class="talk__code-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              <div class="talk__code" data-country-picker>
+                <input type="hidden" name="phoneCountry" value="IN" data-country-value />
+                <button
+                  class="talk__code-btn"
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-controls="talk-country-panel"
+                  aria-label="Country code: India +91"
+                  data-country-trigger
+                >
+                  <img class="talk__flag" src="/assets/flags/in.svg" alt="" width="20" height="15" data-country-flag />
+                  <span class="talk__code-value" data-talk-dial>+91</span>
+                  <svg class="talk__code-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="talk__country-panel" id="talk-country-panel" hidden data-country-panel>
+                  <div class="talk__country-search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                    <input
+                      type="text"
+                      role="combobox"
+                      aria-expanded="true"
+                      aria-controls="talk-country-list"
+                      aria-autocomplete="list"
+                      aria-label="Search countries"
+                      placeholder="Search country or code"
+                      autocomplete="off"
+                      spellcheck="false"
+                      data-country-search
+                    />
+                  </div>
+                  <ul class="talk__country-list" id="talk-country-list" role="listbox" aria-label="Countries" data-country-list></ul>
+                  <p class="talk__country-empty" hidden data-country-empty>No matches</p>
+                </div>
               </div>
               <input id="talk-phone" name="phoneNumber" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="20" placeholder="98765 43210" required />
             </div>
@@ -1028,7 +994,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           </span>
           <h3 class="talk__done-title" tabindex="-1" data-talk-done-title>Got it — thanks!</h3>
-          <p class="talk__done-body">We'll reply within 24 hours. Need us sooner? Email <a href="mailto:varwent@gmail.com">varwent@gmail.com</a>.</p>
+          <p class="talk__done-body">We'll reach out soon.</p>
           <button class="btn btn--ghost btn--lg" type="button" data-talk-close>Close</button>
         </div>
       </div>

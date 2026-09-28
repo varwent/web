@@ -87,19 +87,18 @@
     });
   }
 
-  // Hero showreel — starts with sound on. Browsers block unmuted autoplay
-  // until the visitor interacts, so fall back to muted and switch the sound
-  // on at the first tap/click/keypress (unless they muted it themselves).
+  // Hero showreel — never autoplays. The visitor starts it with the Play button,
+  // which counts as a user gesture, so it plays with sound from the first frame.
   const video = document.querySelector("[data-showreel]");
   if (video) {
     const frame = video.closest(".showreel__frame");
+    const startBtn = document.querySelector("[data-showreel-start]");
     const playBtn = document.querySelector("[data-showreel-play]");
     const restartBtn = document.querySelector("[data-showreel-restart]");
     const seek = document.querySelector("[data-showreel-seek]");
     const soundBtn = document.querySelector("[data-showreel-sound]");
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let userMuted = false;
-    let userPaused = reduceMotion;
+    let started = false;
+    let userPaused = false;
     let scrubbing = false;
 
     const fmt = (t) => {
@@ -146,46 +145,27 @@
     video.addEventListener("volumechange", syncSound);
 
     const play = () => {
-      const wantSound = !userMuted;
-      video.muted = !wantSound;
       const p = video.play();
-      if (!p || !p.catch) return;
-      p.catch(() => {
-        if (!wantSound) return;
-        video.muted = true;
-        video.play().catch(() => {});
-      });
+      if (p && p.catch) p.catch(() => {});
     };
 
-    const unlock = (e) => {
-      if (soundBtn && soundBtn.contains(e.target)) return;
-      ["pointerdown", "keydown", "touchend"].forEach((t) =>
-        document.removeEventListener(t, unlock, true)
-      );
-      if (userMuted || !video.muted || video.paused) return;
+    const start = () => {
+      started = true;
+      userPaused = false;
       video.muted = false;
-      video.play().catch(() => {
-        video.muted = true;
-      });
-    };
-
-    if (reduceMotion) {
-      video.removeAttribute("autoplay");
-      video.pause();
-      video.muted = false;
-    } else {
-      ["pointerdown", "keydown", "touchend"].forEach((t) =>
-        document.addEventListener(t, unlock, true)
-      );
+      if (frame) frame.dataset.started = "true";
       play();
-    }
+      if (playBtn) playBtn.focus({ preventScroll: true });
+    };
 
-    // Pause off-screen; resume on return unless the visitor paused it
+    if (startBtn) startBtn.addEventListener("click", start);
+
+    // Pause off-screen; resume on return only if it was started and not paused by the visitor
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(
         ([entry]) => {
           if (!entry.isIntersecting) video.pause();
-          else if (video.paused && !userPaused) play();
+          else if (started && video.paused && !userPaused) play();
         },
         { threshold: 0.25 }
       ).observe(video);
@@ -235,8 +215,6 @@
     if (soundBtn) {
       soundBtn.addEventListener("click", () => {
         video.muted = !video.muted;
-        userMuted = video.muted;
-        if (!video.muted && video.paused && !userPaused) video.play().catch(() => {});
       });
     }
 
@@ -311,11 +289,186 @@
       SG: [8, 8], DE: [10, 11], SA: [9, 9], QA: [8, 8], KW: [8, 8], BH: [8, 8], OM: [8, 8],
       NP: [10, 10], BD: [10, 10], PK: [10, 10], LK: [9, 9], NZ: [8, 10], MY: [9, 10],
     };
-    const countrySel = form.querySelector("[data-talk-country]");
-    const dialOut = form.querySelector("[data-talk-dial]");
-    const dialCode = () => countrySel.selectedOptions[0]?.dataset.dial || "";
-    const syncDial = () => (dialOut.textContent = dialCode());
-    countrySel.addEventListener("change", syncDial);
+    // Country code picker — [ISO code, name, dial code]; the first group is pinned to the top
+    const POPULAR = [
+      ["IN", "India", "+91"],
+      ["US", "United States", "+1"],
+      ["GB", "United Kingdom", "+44"],
+      ["AE", "United Arab Emirates", "+971"],
+      ["CA", "Canada", "+1"],
+      ["AU", "Australia", "+61"],
+      ["SG", "Singapore", "+65"],
+      ["DE", "Germany", "+49"]
+    ];
+    const OTHERS = [
+      ["AF", "Afghanistan", "+93"],
+      ["AR", "Argentina", "+54"],
+      ["AT", "Austria", "+43"],
+      ["BH", "Bahrain", "+973"],
+      ["BD", "Bangladesh", "+880"],
+      ["BE", "Belgium", "+32"],
+      ["BT", "Bhutan", "+975"],
+      ["BR", "Brazil", "+55"],
+      ["CL", "Chile", "+56"],
+      ["CN", "China", "+86"],
+      ["CO", "Colombia", "+57"],
+      ["CZ", "Czechia", "+420"],
+      ["DK", "Denmark", "+45"],
+      ["EG", "Egypt", "+20"],
+      ["FI", "Finland", "+358"],
+      ["FR", "France", "+33"],
+      ["GH", "Ghana", "+233"],
+      ["GR", "Greece", "+30"],
+      ["HK", "Hong Kong", "+852"],
+      ["HU", "Hungary", "+36"],
+      ["ID", "Indonesia", "+62"],
+      ["IE", "Ireland", "+353"],
+      ["IL", "Israel", "+972"],
+      ["IT", "Italy", "+39"],
+      ["JP", "Japan", "+81"],
+      ["JO", "Jordan", "+962"],
+      ["KE", "Kenya", "+254"],
+      ["KW", "Kuwait", "+965"],
+      ["MY", "Malaysia", "+60"],
+      ["MV", "Maldives", "+960"],
+      ["MU", "Mauritius", "+230"],
+      ["MX", "Mexico", "+52"],
+      ["MA", "Morocco", "+212"],
+      ["NP", "Nepal", "+977"],
+      ["NL", "Netherlands", "+31"],
+      ["NZ", "New Zealand", "+64"],
+      ["NG", "Nigeria", "+234"],
+      ["NO", "Norway", "+47"],
+      ["OM", "Oman", "+968"],
+      ["PK", "Pakistan", "+92"],
+      ["PH", "Philippines", "+63"],
+      ["PL", "Poland", "+48"],
+      ["PT", "Portugal", "+351"],
+      ["QA", "Qatar", "+974"],
+      ["RO", "Romania", "+40"],
+      ["SA", "Saudi Arabia", "+966"],
+      ["ZA", "South Africa", "+27"],
+      ["KR", "South Korea", "+82"],
+      ["ES", "Spain", "+34"],
+      ["LK", "Sri Lanka", "+94"],
+      ["SE", "Sweden", "+46"],
+      ["CH", "Switzerland", "+41"],
+      ["TW", "Taiwan", "+886"],
+      ["TZ", "Tanzania", "+255"],
+      ["TH", "Thailand", "+66"],
+      ["TR", "Türkiye", "+90"],
+      ["UG", "Uganda", "+256"],
+      ["UA", "Ukraine", "+380"],
+      ["VN", "Vietnam", "+84"]
+    ];
+    const COUNTRIES = [...POPULAR, ...OTHERS];
+    const byCode = Object.fromEntries(COUNTRIES.map((c) => [c[0], c]));
+
+    const picker = form.querySelector("[data-country-picker]");
+    const countryInput = picker.querySelector("[data-country-value]");
+    const trigger = picker.querySelector("[data-country-trigger]");
+    const flagImg = picker.querySelector("[data-country-flag]");
+    const dialOut = picker.querySelector("[data-talk-dial]");
+    const panel = picker.querySelector("[data-country-panel]");
+    const search = picker.querySelector("[data-country-search]");
+    const list = picker.querySelector("[data-country-list]");
+    const empty = picker.querySelector("[data-country-empty]");
+    const flagSrc = (code) => `/assets/flags/${code.toLowerCase()}.svg`;
+    const CHECK = '<svg class="talk__country-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
+    const current = () => byCode[countryInput.value] || byCode.IN;
+    const dialCode = () => current()[2];
+
+    const setCountry = (code) => {
+      const [iso, name, dial] = byCode[code] || byCode.IN;
+      countryInput.value = iso;
+      flagImg.src = flagSrc(iso);
+      dialOut.textContent = dial;
+      trigger.setAttribute("aria-label", `Country code: ${name} ${dial}`);
+    };
+
+    let visible = [];
+    let active = -1;
+
+    const renderList = () => {
+      const q = search.value.trim().toLowerCase().replace(/^\+/, "");
+      const match = (c) => !q || c[1].toLowerCase().includes(q) || c[2].slice(1).startsWith(q) || c[0].toLowerCase() === q;
+      const groups = q ? [COUNTRIES.filter(match).sort((x, y) => x[1].localeCompare(y[1]))] : [POPULAR, OTHERS];
+      visible = [];
+      list.innerHTML = groups
+        .map((g) =>
+          g
+            .map((c) => {
+              visible.push(c[0]);
+              const selected = c[0] === countryInput.value;
+              return `<li role="option" id="country-opt-${c[0]}" data-code="${c[0]}" aria-selected="${selected}">` +
+                `<img class="talk__flag" src="${flagSrc(c[0])}" alt="" width="20" height="15" loading="lazy" />` +
+                `<span class="talk__country-name">${c[1]}</span>` +
+                `<span class="talk__country-dial">${c[2]}</span>${selected ? CHECK : ""}</li>`;
+            })
+            .join("")
+        )
+        .join('<li class="talk__country-sep" role="presentation" aria-hidden="true"></li>');
+      empty.hidden = visible.length > 0;
+      setActive(q ? 0 : visible.indexOf(countryInput.value));
+    };
+
+    const setActive = (i) => {
+      list.querySelector(".is-active")?.classList.remove("is-active");
+      active = visible.length ? Math.max(0, Math.min(i, visible.length - 1)) : -1;
+      if (active < 0) return search.removeAttribute("aria-activedescendant");
+      const li = list.querySelector(`[data-code="${visible[active]}"]`);
+      li.classList.add("is-active");
+      search.setAttribute("aria-activedescendant", li.id);
+      li.scrollIntoView({ block: "nearest" });
+    };
+
+    const openPicker = () => {
+      panel.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      search.value = "";
+      renderList();
+      search.focus({ preventScroll: true });
+      panel.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    };
+    const closePicker = (focusTrigger = true) => {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (focusTrigger) trigger.focus();
+    };
+    const choose = (code) => {
+      setCountry(code);
+      closePicker(false);
+      form.elements.phoneNumber.focus();
+      form.dispatchEvent(new Event("input")); // re-check a flagged phone error
+    };
+
+    trigger.addEventListener("click", () => (panel.hidden ? openPicker() : closePicker()));
+    search.addEventListener("input", renderList);
+    search.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+      else if (e.key === "Home") { e.preventDefault(); setActive(0); }
+      else if (e.key === "End") { e.preventDefault(); setActive(visible.length - 1); }
+      else if (e.key === "Enter") { e.preventDefault(); if (active >= 0) choose(visible[active]); }
+      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); closePicker(); }
+      else if (e.key === "Tab") closePicker(false);
+    });
+    list.addEventListener("click", (e) => {
+      const li = e.target.closest("li[data-code]");
+      if (li) choose(li.dataset.code);
+    });
+    // Esc inside the picker closes only the picker, not the whole dialog
+    talk.addEventListener("cancel", (e) => {
+      if (!panel.hidden) {
+        e.preventDefault();
+        closePicker();
+      }
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (!panel.hidden && !picker.contains(e.target)) closePicker(false);
+    });
 
     // Best guess at the visitor's country: time zone first, then browser language
     (() => {
@@ -324,12 +477,11 @@
         "Europe/London": "GB", "Australia/Sydney": "AU", "Australia/Melbourne": "AU", "Europe/Berlin": "DE" };
       let cc = byTz[tz];
       if (!cc) {
-        const region = (navigator.language || "").split("-")[1];
-        if (region && countrySel.querySelector(`option[value="${region.toUpperCase()}"]`)) cc = region.toUpperCase();
+        const region = ((navigator.language || "").split("-")[1] || "").toUpperCase();
+        if (byCode[region]) cc = region;
         else if (tz.startsWith("America/")) cc = "US";
       }
-      if (cc && countrySel.querySelector(`option[value="${cc}"]`)) countrySel.value = cc;
-      syncDial();
+      setCountry(cc || "IN");
     })();
 
     // Map a logical field to the control that should show the error / take focus
@@ -343,7 +495,7 @@
       const { name, email, phoneNumber } = form.elements;
       const digits = phoneNumber.value.replace(/\D/g, "").replace(/^0+/, "");
       if (!name.value.trim()) errs.name = "Please add your name.";
-      const [minLen, maxLen] = PHONE_LENGTHS[countrySel.value] || [6, 14];
+      const [minLen, maxLen] = PHONE_LENGTHS[countryInput.value] || [6, 14];
       if (digits.length < minLen || digits.length > maxLen || digits.length + dialCode().length - 1 > 15) {
         errs.phone = "Please add a valid phone number.";
       }
@@ -358,7 +510,7 @@
       if (!done.hidden) {
         // Fresh form after a previous successful send
         form.reset();
-        syncDial();
+        setCountry(countryInput.value);
         form.hidden = false;
         done.hidden = true;
       }
@@ -375,6 +527,7 @@
     const closeTalk = () => talk.close();
 
     talk.addEventListener("close", () => {
+      closePicker(false);
       if (location.pathname.replace(/\/$/, "") === "/lets-talk" || location.hash === "#lets-talk") {
         history.replaceState(null, "", "/");
       }
