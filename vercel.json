@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/lets-talk", "destination": "/index.html" }
+  ],
   "redirects": [
     {
       "source": "/favicon.ico",

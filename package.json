@@ -1,0 +1,15 @@
+{
+  "name": "varwent-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.4.0",
+    "mongodb": "^7.0.0"
+  }
+}

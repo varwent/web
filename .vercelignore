@@ -1,0 +1,6 @@
+# Not part of the live site
+.agents/
+docs/
+tests/
+integrations/
+assets/partners/partners_info.md

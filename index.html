@@ -21,7 +21,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111&amp;tr=w-192,h-192,r-max,f-png" />
     <link rel="apple-touch-icon" sizes="180x180" href="https://ik.imagekit.io/varwent/web/logo.png?updatedAt=1789909285111&amp;tr=w-180,h-180,f-png" />
     <link rel="preconnect" href="https://ik.imagekit.io" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
 
     <!-- Vercel Web Analytics -->
     <script>
@@ -48,7 +48,7 @@
         </nav>
 
         <div class="nav__actions">
-          <a class="btn btn--primary nav__cta" href="#contact">
+          <a class="btn btn--primary nav__cta" href="/lets-talk" data-talk-open>
             Let's talk
             <span aria-hidden="true">→</span>
           </a>
@@ -73,7 +73,7 @@
           <a href="#team">Team</a>
           <a href="#work">Work</a>
           <a href="#faq">FAQs</a>
-          <a class="btn btn--primary btn--lg nav__menu-cta" href="#contact">
+          <a class="btn btn--primary btn--lg nav__menu-cta" href="/lets-talk" data-talk-open>
             Let's talk
             <span aria-hidden="true">→</span>
           </a>
@@ -105,8 +105,8 @@
             </p>
 
             <div class="hero__ctas">
-              <a class="btn btn--primary btn--lg" href="#contact">
-                Start a project
+              <a class="btn btn--primary btn--lg" href="/lets-talk" data-talk-open>
+                Let's talk
                 <span aria-hidden="true">→</span>
               </a>
               <a class="btn btn--ghost btn--lg" href="#work">See our work</a>
@@ -501,7 +501,7 @@
                 <li>Next.js, React, headless CMS</li>
                 <li>Performance budgets baked in</li>
               </ul>
-              <a class="bento__cta" href="#contact">
+              <a class="bento__cta" href="/lets-talk" data-talk-open="web">
                 <span>Tell us about your project</span>
                 <span aria-hidden="true">→</span>
               </a>
@@ -522,7 +522,7 @@
                 <li>Third-party API glue</li>
                 <li>Scheduled jobs &amp; webhooks</li>
               </ul>
-              <a class="bento__cta" href="#contact">
+              <a class="bento__cta" href="/lets-talk" data-talk-open="automation">
                 <span>Talk to us</span>
                 <span aria-hidden="true">→</span>
               </a>
@@ -543,7 +543,7 @@
                 <li>RAG &amp; agent workflows</li>
                 <li>Embeddings &amp; vector search</li>
               </ul>
-              <a class="bento__cta" href="#contact">
+              <a class="bento__cta" href="/lets-talk" data-talk-open="ai">
                 <span>Talk to us</span>
                 <span aria-hidden="true">→</span>
               </a>
@@ -796,8 +796,8 @@
               </p>
             </div>
             <div class="cta__actions">
-              <a class="btn btn--primary btn--lg" href="mailto:varwent@gmail.com">
-                Start a project
+              <a class="btn btn--primary btn--lg" href="/lets-talk" data-talk-open>
+                Let's talk
                 <span aria-hidden="true">→</span>
               </a>
               <a class="btn btn--ghost btn--lg" href="#work">See our work</a>
@@ -886,6 +886,90 @@
       </div>
     </footer>
 
-    <script src="script.js" defer></script>
+    <dialog class="talk" id="lets-talk" aria-labelledby="talk-title" data-talk>
+      <div class="talk__panel">
+        <header class="talk__head">
+          <div>
+            <h2 class="talk__title" id="talk-title">Let's talk</h2>
+            <p class="talk__sub">Tell us what you're building. We reply within 24 hours.</p>
+          </div>
+          <button class="talk__close" type="button" aria-label="Close" data-talk-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </header>
+
+        <form class="talk__form" novalidate data-talk-form>
+          <div class="talk__row">
+            <label class="talk__field">
+              <span class="talk__label">Name</span>
+              <input name="name" type="text" autocomplete="name" maxlength="100" required />
+              <span class="talk__error" data-error-for="name"></span>
+            </label>
+            <label class="talk__field">
+              <span class="talk__label">Email</span>
+              <input name="email" type="email" autocomplete="email" maxlength="254" required />
+              <span class="talk__error" data-error-for="email"></span>
+            </label>
+          </div>
+
+          <label class="talk__field">
+            <span class="talk__label">Company <span class="talk__optional">optional</span></span>
+            <input name="company" type="text" autocomplete="organization" maxlength="120" />
+          </label>
+
+          <fieldset class="talk__group">
+            <legend class="talk__label">What do you need?</legend>
+            <div class="talk__chips">
+                  <label class="talk__chip"><input type="checkbox" name="services" value="web" /><span>Web development</span></label>
+                  <label class="talk__chip"><input type="checkbox" name="services" value="automation" /><span>Automation</span></label>
+                  <label class="talk__chip"><input type="checkbox" name="services" value="ai" /><span>AI integrations</span></label>
+                  <label class="talk__chip"><input type="checkbox" name="services" value="other" /><span>Something else</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="talk__group">
+            <legend class="talk__label">Budget</legend>
+            <div class="talk__chips">
+                  <label class="talk__chip"><input type="radio" name="budget" value="under-1k" /><span>Under $1k</span></label>
+                  <label class="talk__chip"><input type="radio" name="budget" value="1k-5k" /><span>$1k – $5k</span></label>
+                  <label class="talk__chip"><input type="radio" name="budget" value="5k-15k" /><span>$5k – $15k</span></label>
+                  <label class="talk__chip"><input type="radio" name="budget" value="15k-plus" /><span>$15k+</span></label>
+                  <label class="talk__chip"><input type="radio" name="budget" value="not-sure" /><span>Not sure yet</span></label>
+            </div>
+          </fieldset>
+
+          <label class="talk__field">
+            <span class="talk__label">Project details</span>
+            <textarea name="message" rows="4" maxlength="3000" required placeholder="What are you building, and what does done look like?"></textarea>
+            <span class="talk__error" data-error-for="message"></span>
+          </label>
+
+          <label class="talk__honey" aria-hidden="true">
+            Website <input name="website" type="text" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <div class="talk__foot">
+            <button class="btn btn--primary btn--lg talk__submit" type="submit">
+              <span data-talk-label>Send message</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <p class="talk__status" role="status" aria-live="polite" data-talk-status></p>
+          </div>
+        </form>
+
+        <div class="talk__done" hidden data-talk-done>
+          <span class="talk__done-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <h3 class="talk__done-title" tabindex="-1" data-talk-done-title>Got it — thanks!</h3>
+          <p class="talk__done-body">We'll reply within 24 hours. Need us sooner? Email <a href="mailto:varwent@gmail.com">varwent@gmail.com</a>.</p>
+          <button class="btn btn--ghost btn--lg" type="button" data-talk-close>Close</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="/script.js" defer></script>
   </body>
 </html>

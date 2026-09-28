@@ -273,6 +273,163 @@
     members.forEach((c) => c.dataset.open === "true" && setMember(c, false));
   });
 
+  // "Let's talk" form — native <dialog>, posts to /api/lets-talk
+  const talk = document.querySelector("[data-talk]");
+  if (talk && typeof talk.showModal === "function") {
+    const form = talk.querySelector("[data-talk-form]");
+    const done = talk.querySelector("[data-talk-done]");
+    const doneTitle = talk.querySelector("[data-talk-done-title]");
+    const status = talk.querySelector("[data-talk-status]");
+    const submit = form.querySelector('[type="submit"]');
+    const submitLabel = form.querySelector("[data-talk-label]");
+    const FALLBACK =
+      'Couldn\'t send that just now. Please try again, or email <a href="mailto:varwent@gmail.com">varwent@gmail.com</a>.';
+    let openedAt = 0;
+
+    const setError = (name, text) => {
+      const field = form.elements[name];
+      const slot = form.querySelector(`[data-error-for="${name}"]`);
+      if (field) {
+        if (text) {
+          field.setAttribute("aria-invalid", "true");
+          if (slot) {
+            slot.id = slot.id || `talk-err-${name}`;
+            field.setAttribute("aria-describedby", slot.id);
+          }
+        } else {
+          field.removeAttribute("aria-invalid");
+          field.removeAttribute("aria-describedby");
+        }
+      }
+      if (slot) slot.textContent = text || "";
+    };
+
+    const validate = () => {
+      const errs = {};
+      const { name, email, message } = form.elements;
+      if (!name.value.trim()) errs.name = "Please add your name.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) errs.email = "Please add a valid email.";
+      if (message.value.trim().length < 10) errs.message = "A line or two about the project, please.";
+      ["name", "email", "message"].forEach((n) => setError(n, errs[n]));
+      return errs;
+    };
+
+    const openTalk = (service) => {
+      if (talk.open) return;
+      if (!done.hidden) {
+        // Fresh form after a previous successful send
+        form.reset();
+        form.hidden = false;
+        done.hidden = true;
+      }
+      if (service && form.elements.services) {
+        form.querySelectorAll('input[name="services"]').forEach((cb) => {
+          if (cb.value === service) cb.checked = true;
+        });
+      }
+      status.innerHTML = "";
+      // Clock for the server's bot check starts when a fresh form first opens,
+      // so reopening a half-filled form never looks "too fast"
+      if (!openedAt) openedAt = Date.now();
+      talk.showModal();
+      // Focus the first field on desktop; on touch, avoid popping the keyboard over the sheet
+      if (window.matchMedia("(hover: hover)").matches) form.elements.name.focus();
+    };
+
+    const closeTalk = () => talk.close();
+
+    talk.addEventListener("close", () => {
+      if (location.pathname.replace(/\/$/, "") === "/lets-talk" || location.hash === "#lets-talk") {
+        history.replaceState(null, "", "/");
+      }
+    });
+
+    document.querySelectorAll("[data-talk-open]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        openTalk(el.dataset.talkOpen);
+      });
+    });
+    talk.querySelectorAll("[data-talk-close]").forEach((el) => el.addEventListener("click", closeTalk));
+
+    // Click on the dimmed backdrop closes (the dialog element itself is the backdrop hit area)
+    talk.addEventListener("click", (e) => {
+      if (e.target === talk) closeTalk();
+    });
+
+    // Clear a field's error as soon as it's fixed
+    form.addEventListener("input", (e) => {
+      const n = e.target.name;
+      if (e.target.getAttribute("aria-invalid") === "true") {
+        const errs = validate();
+        ["name", "email", "message"].forEach((k) => k !== n && !errs[k] && setError(k, ""));
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      status.innerHTML = "";
+      const errs = validate();
+      const first = Object.keys(errs)[0];
+      if (first) {
+        form.elements[first].focus();
+        return;
+      }
+
+      const fd = new FormData(form);
+      const payload = {
+        name: fd.get("name"),
+        email: fd.get("email"),
+        company: fd.get("company"),
+        services: fd.getAll("services"),
+        budget: fd.get("budget") || "",
+        message: fd.get("message"),
+        website: fd.get("website"),
+        page: location.pathname + location.search,
+        elapsedMs: Date.now() - openedAt,
+      };
+
+      submit.disabled = true;
+      submitLabel.textContent = "Sending…";
+      try {
+        const res = await fetch("/api/lets-talk", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          const firstName = String(payload.name).trim().split(/\s+/)[0];
+          doneTitle.textContent = firstName ? `Thanks, ${firstName}!` : "Got it — thanks!";
+          form.hidden = true;
+          done.hidden = false;
+          openedAt = 0;
+          talk.querySelector(".talk__panel").scrollTop = 0;
+          doneTitle.focus();
+        } else if (data.error === "validation" && data.fields) {
+          Object.entries(data.fields).forEach(([k, v]) => setError(k, v));
+          const k = Object.keys(data.fields)[0];
+          if (form.elements[k]) form.elements[k].focus();
+        } else if (res.status === 429) {
+          status.innerHTML =
+            'You\'ve sent a few already — we\'ll be in touch. Anything urgent: <a href="mailto:varwent@gmail.com">varwent@gmail.com</a>.';
+        } else {
+          status.innerHTML = FALLBACK;
+        }
+      } catch {
+        status.innerHTML = FALLBACK;
+      } finally {
+        submit.disabled = false;
+        submitLabel.textContent = "Send message";
+      }
+    });
+
+    // Shareable link: varwent.com/lets-talk (or /#lets-talk) opens the form
+    if (location.pathname.replace(/\/$/, "") === "/lets-talk" || location.hash === "#lets-talk") {
+      openTalk();
+    }
+  }
+
   // Smooth FAQ accordion — eases open/close with height + opacity
   document.querySelectorAll(".faq__item").forEach((item) => {
     const summary = item.querySelector("summary");
