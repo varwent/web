@@ -16,6 +16,13 @@ export const INTEREST_LABELS = {
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_LABELS);
 
+// National number length [min, max] for common countries; others fall back to 6–14
+export const PHONE_LENGTHS = {
+  IN: [10, 10], US: [10, 10], CA: [10, 10], GB: [10, 10], AE: [9, 9], AU: [9, 9],
+  SG: [8, 8], DE: [10, 11], SA: [9, 9], QA: [8, 8], KW: [8, 8], BH: [8, 8], OM: [8, 8],
+  NP: [10, 10], BD: [10, 10], PK: [10, 10], LK: [9, 9], NZ: [8, 10], MY: [9, 10],
+};
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const RATE_LIMIT = { max: 5, windowMs: 10 * 60_000 };
 const MIN_FILL_MS = 1500;
@@ -46,8 +53,9 @@ export function validateLead(input) {
   if (!lead.name) errors.name = "Please add your name.";
   if (!EMAIL_RE.test(lead.email)) errors.email = "Please add a valid email.";
   // E.164: "+" then at most 15 digits in total
+  const [minLen, maxLen] = PHONE_LENGTHS[lead.phoneCountry] || [6, 14];
   if (!/^\+[1-9]\d{0,3}$/.test(dial)) errors.phone = "Please pick a country code.";
-  else if (national.length < 6 || dial.length - 1 + national.length > 15) {
+  else if (national.length < minLen || national.length > maxLen || dial.length - 1 + national.length > 15) {
     errors.phone = "Please add a valid phone number.";
   } else lead.phone = dial + national;
   if (!lead.businessType) errors.businessType = "Please pick your business type.";

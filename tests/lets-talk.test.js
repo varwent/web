@@ -181,6 +181,16 @@ test("phone validation: country code required, E.164 max 15 digits", () => {
   assert.equal(validateLead({ ...valid, phoneCountry: "not-a-code" }).lead.phoneCountry, "");
 });
 
+test("phone validation: per-country digit counts", () => {
+  // the real test submission: 13 digits after +91 must be rejected
+  assert.ok(validateLead({ ...valid, phoneNumber: "3749535934857" }).errors.phone);
+  assert.ok(validateLead({ ...valid, phoneNumber: "98765 4321" }).errors.phone, "9 digits for IN");
+  assert.equal(validateLead({ ...valid, phoneNumber: "+91 98765 43210".replace("+91", "") }).lead.phone, "+919876543210");
+  assert.equal(validateLead({ ...valid, phoneCountry: "AE", phoneCode: "+971", phoneNumber: "050 123 4567" }).lead.phone, "+971501234567");
+  // unlisted country falls back to 6–14 digits
+  assert.equal(validateLead({ ...valid, phoneCountry: "FR", phoneCode: "+33", phoneNumber: "6 12 34 56 78" }).lead.phone, "+33612345678");
+});
+
 // --- Sheets sync ----------------------------------------------------------------
 const env = { SHEETS_WEBHOOK_URL: "https://script.google.com/macros/s/x/exec", SHEETS_WEBHOOK_SECRET: "s3cret" };
 const reply = (obj, status = 200) => new Response(JSON.stringify(obj), { status });

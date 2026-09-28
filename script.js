@@ -305,6 +305,12 @@
     };
 
     const FIELDS = ["name", "phone", "email", "businessType"];
+    // Keep in sync with PHONE_LENGTHS in api/_lib/lead.js
+    const PHONE_LENGTHS = {
+      IN: [10, 10], US: [10, 10], CA: [10, 10], GB: [10, 10], AE: [9, 9], AU: [9, 9],
+      SG: [8, 8], DE: [10, 11], SA: [9, 9], QA: [8, 8], KW: [8, 8], BH: [8, 8], OM: [8, 8],
+      NP: [10, 10], BD: [10, 10], PK: [10, 10], LK: [9, 9], NZ: [8, 10], MY: [9, 10],
+    };
     const countrySel = form.querySelector("[data-talk-country]");
     const dialOut = form.querySelector("[data-talk-dial]");
     const dialCode = () => countrySel.selectedOptions[0]?.dataset.dial || "";
@@ -337,7 +343,10 @@
       const { name, email, phoneNumber } = form.elements;
       const digits = phoneNumber.value.replace(/\D/g, "").replace(/^0+/, "");
       if (!name.value.trim()) errs.name = "Please add your name.";
-      if (digits.length < 6 || digits.length + dialCode().length - 1 > 15) errs.phone = "Please add a valid phone number.";
+      const [minLen, maxLen] = PHONE_LENGTHS[countrySel.value] || [6, 14];
+      if (digits.length < minLen || digits.length > maxLen || digits.length + dialCode().length - 1 > 15) {
+        errs.phone = "Please add a valid phone number.";
+      }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) errs.email = "Please add a valid email.";
       if (!form.querySelector('input[name="businessType"]:checked')) errs.businessType = "Please pick your business type.";
       FIELDS.forEach((n) => setError(n, errs[n]));
