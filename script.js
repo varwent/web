@@ -87,12 +87,11 @@
     });
   }
 
-  // Hero showreel — never autoplays. The visitor starts it with the Play button,
-  // which counts as a user gesture, so it plays with sound from the first frame.
+  // Hero showreel — always loads paused (never autoplays). The visitor starts it
+  // from the player's own Play button, which plays with sound.
   const video = document.querySelector("[data-showreel]");
   if (video) {
     const frame = video.closest(".showreel__frame");
-    const startBtn = document.querySelector("[data-showreel-start]");
     const playBtn = document.querySelector("[data-showreel-play]");
     const restartBtn = document.querySelector("[data-showreel-restart]");
     const seek = document.querySelector("[data-showreel-seek]");
@@ -149,16 +148,7 @@
       if (p && p.catch) p.catch(() => {});
     };
 
-    const start = () => {
-      started = true;
-      userPaused = false;
-      video.muted = false;
-      if (frame) frame.dataset.started = "true";
-      play();
-      if (playBtn) playBtn.focus({ preventScroll: true });
-    };
-
-    if (startBtn) startBtn.addEventListener("click", start);
+    video.addEventListener("play", () => (started = true), { once: true });
 
     // Pause off-screen; resume on return only if it was started and not paused by the visitor
     if ("IntersectionObserver" in window) {
@@ -423,13 +413,49 @@
       li.scrollIntoView({ block: "nearest" });
     };
 
+    // Place the panel above the phone row (below only if there's clearly more room there)
+    const phoneRow = picker.parentElement;
+    const placePanel = () => {
+      if (panel.hidden) return;
+      const row = phoneRow.getBoundingClientRect();
+      const vv = window.visualViewport;
+      const viewTop = vv ? vv.offsetTop : 0;
+      const viewBottom = viewTop + (vv ? vv.height : window.innerHeight);
+      const gap = 6;
+      const edge = 12;
+      const spaceAbove = row.top - viewTop - gap - edge;
+      const spaceBelow = viewBottom - row.bottom - gap - edge;
+      const up = spaceAbove >= 220 || spaceAbove >= spaceBelow;
+      const searchH = panel.firstElementChild.offsetHeight || 46;
+      list.style.maxHeight = `${Math.max(120, Math.min(280, (up ? spaceAbove : spaceBelow) - searchH - 14))}px`;
+      panel.dataset.side = up ? "top" : "bottom";
+      panel.style.left = `${row.left}px`;
+      panel.style.width = `${row.width}px`;
+      if (up) {
+        panel.style.top = "";
+        panel.style.bottom = `${window.innerHeight - row.top + gap}px`;
+      } else {
+        panel.style.bottom = "";
+        panel.style.top = `${row.bottom + gap}px`;
+      }
+    };
+    const scroller = talk.querySelector(".talk__panel");
+    ["resize", "scroll"].forEach((t) => {
+      window.addEventListener(t, placePanel, { passive: true });
+      window.visualViewport?.addEventListener(t, placePanel, { passive: true });
+    });
+    scroller.addEventListener("scroll", placePanel, { passive: true });
+
     const openPicker = () => {
       panel.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       search.value = "";
       renderList();
-      search.focus({ preventScroll: true });
-      panel.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      placePanel();
+      // Keyboard/mouse users can type straight away; on touch, don't pop the keyboard over the list
+      if (window.matchMedia("(hover: hover)").matches) search.focus({ preventScroll: true });
+      const sel = list.querySelector('[aria-selected="true"]');
+      if (sel) sel.scrollIntoView({ block: "nearest" });
     };
     const closePicker = (focusTrigger = true) => {
       if (panel.hidden) return;
@@ -505,16 +531,20 @@
       return errs;
     };
 
-    const openTalk = (service) => {
+    const sub = talk.querySelector("[data-talk-sub]");
+    const SUB_DEFAULT = sub.textContent;
+    const SUB_DONE = "We\u2019ve got you, and we\u2019ll connect with you soon.";
+
+    const openTalk = () => {
       if (talk.open) return;
       if (!done.hidden) {
         // Fresh form after a previous successful send
         form.reset();
         setCountry(countryInput.value);
+        sub.textContent = SUB_DEFAULT;
         form.hidden = false;
         done.hidden = true;
       }
-      form.elements.interest.value = service || "";
       status.innerHTML = "";
       // Clock for the server's bot check starts when a fresh form first opens,
       // so reopening a half-filled form never looks "too fast"
@@ -536,7 +566,7 @@
     document.querySelectorAll("[data-talk-open]").forEach((el) => {
       el.addEventListener("click", (e) => {
         e.preventDefault();
-        openTalk(el.dataset.talkOpen);
+        openTalk();
       });
     });
     talk.querySelectorAll("[data-talk-close]").forEach((el) => el.addEventListener("click", closeTalk));
@@ -573,7 +603,6 @@
         phoneNumber: fd.get("phoneNumber"),
         email: fd.get("email"),
         businessType: fd.get("businessType") || "",
-        interest: fd.get("interest") || "",
         website: fd.get("website"),
         page: location.pathname + location.search,
         elapsedMs: Date.now() - openedAt,
@@ -593,6 +622,7 @@
           doneTitle.textContent = firstName ? `Thanks, ${firstName}!` : "Got it — thanks!";
           form.hidden = true;
           done.hidden = false;
+          sub.textContent = SUB_DONE;
           openedAt = 0;
           talk.querySelector(".talk__panel").scrollTop = 0;
           doneTitle.focus();

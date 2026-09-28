@@ -71,7 +71,6 @@ const valid = {
   phoneCode: "+91",
   phoneNumber: "098765 43210",
   businessType: "ecommerce",
-  interest: "ai",
   page: "/",
   elapsedMs: 9000,
 };
@@ -113,12 +112,18 @@ test("valid lead is saved and returns 201", async () => {
   assert.equal(doc.phone, "+919876543210"); // E.164: spaces and leading 0 removed
   assert.equal(doc.phoneCountry, "IN");
   assert.equal(doc.businessType, "ecommerce");
-  assert.equal(doc.interest, "ai");
+  assert.equal(doc.interest, undefined, "interest is no longer stored");
   assert.equal(doc.status, "new");
   assert.equal(doc.sheet.attempts, 0);
   assert.match(doc.ipHash, /^[0-9a-f]{32}$/);
   assert.ok(!JSON.stringify(doc).includes("203.0.113.7"), "raw IP must not be stored");
   assert.equal(inserted.length, 1, "afterInsert (sheet sync) is triggered");
+});
+
+test("an 'interest' field sent by an old client is ignored", async () => {
+  const { leads, handler } = setup();
+  assert.equal((await handler(post({ ...valid, interest: "ai" }))).status, 201);
+  assert.equal("interest" in leads.docs[0], false);
 });
 
 test("missing fields return 400 with field errors", async () => {
@@ -198,7 +203,7 @@ const reply = (obj, status = 200) => new Response(JSON.stringify(obj), { status 
 test("toSheetRow uses readable labels", () => {
   const row = toSheetRow({ _id: "abc", createdAt: new Date("2026-09-28T10:00:00Z"), ...valid, phone: "+919876543210" });
   assert.equal(row.businessType, "E-commerce / D2C");
-  assert.equal(row.interest, "AI integrations");
+  assert.equal(row.interest, undefined);
   assert.equal(row.phone, "+919876543210");
   assert.equal(row.id, "abc");
 });

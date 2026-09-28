@@ -3,7 +3,7 @@
 // a failed sync is recorded on the lead and retried on later submissions.
 // The Apps Script skips lead IDs it already has, so retries never duplicate rows.
 
-import { BUSINESS_LABELS, INTEREST_LABELS } from "./lead.js";
+import { BUSINESS_LABELS } from "./lead.js";
 
 const MAX_ATTEMPTS = 5;
 const BACKLOG_BATCH = 5;
@@ -20,7 +20,6 @@ export function toSheetRow(lead) {
     phone: lead.phone,
     email: lead.email,
     businessType: BUSINESS_LABELS[lead.businessType] || lead.businessType || "",
-    interest: INTEREST_LABELS[lead.interest] || "",
     page: lead.page || "",
   };
 }

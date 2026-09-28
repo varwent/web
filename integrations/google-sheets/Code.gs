@@ -13,7 +13,7 @@
 const SHARED_SECRET = 'PASTE_SECRET_HERE';
 
 const SHEET_NAME = 'Leads';
-const HEADERS = ['Received', 'Name', 'Phone', 'Email', 'Business type', 'Interest', 'Page', 'Lead ID'];
+const HEADERS = ['Received', 'Name', 'Phone', 'Email', 'Business type', 'Page', 'Lead ID'];
 const ID_COLUMN = HEADERS.indexOf('Lead ID') + 1;
 
 /** Run once from the editor: creates the Leads tab and a shared secret. */
@@ -48,7 +48,6 @@ function doPost(e) {
         safe_(lead.phone),
         safe_(lead.email),
         safe_(lead.businessType),
-        safe_(lead.interest),
         safe_(lead.page),
         safe_(lead.id),
       ]);

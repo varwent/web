@@ -79,7 +79,6 @@ Environment variables apply to new deployments. Vercel → **Deployments** → l
   name, email,
   phone: "+919876543210", phoneCountry: "IN",   // E.164
   businessType: "ecommerce",                    // startup | small-business | ecommerce | agency | enterprise | other
-  interest: "ai",                               // which service card opened the form, if any
   page: "/", status: "new", createdAt, userAgent,
   ipHash,                                   // salted hash, for rate limiting only
   sheet: { attempts, syncedAt?, error? }    // Google Sheets copy status
@@ -90,7 +89,7 @@ Spam protection: hidden honeypot field, minimum fill time, same-origin check, an
 
 ## Troubleshooting
 
-Sheet columns: Received · Name · Phone · Email · Business type · Interest · Page · Lead ID
+Sheet columns: Received · Name · Phone · Email · Business type · Page · Lead ID
 
 - **Form says "Couldn't send that just now"** → Vercel → project → **Logs**, filter `lets-talk`.
   `MONGODB_URI is not set` = step 1 not done (or not redeployed). Timeouts = Atlas Network Access missing `0.0.0.0/0`.

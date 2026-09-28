@@ -609,73 +609,6 @@ section {
   }
 }
 
-/* Start state: the whole frame is the play button until the video is started */
-.showreel__start {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  color: #fff;
-  background: radial-gradient(closest-side, rgba(15, 17, 21, 0.28), rgba(15, 17, 21, 0.08));
-  transition-property: opacity, visibility;
-  transition-duration: 240ms;
-  transition-timing-function: var(--ease-quick);
-}
-.showreel__start-icon {
-  display: grid;
-  place-items: center;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94);
-  color: var(--ink);
-  box-shadow: 0 10px 30px rgba(15, 17, 21, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.4);
-  transition-property: transform;
-  transition-duration: 200ms;
-  transition-timing-function: var(--ease-quick);
-}
-.showreel__start-icon svg {
-  width: 28px;
-  height: 28px;
-  margin-left: 3px; /* optical centre of the triangle */
-}
-.showreel__start-label {
-  padding: 7px 14px;
-  border-radius: var(--r-pill);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  background: rgba(15, 17, 21, 0.55);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
-}
-@media (hover: hover) {
-  .showreel__start:hover .showreel__start-icon {
-    transform: scale(1.06);
-  }
-}
-.showreel__start:active .showreel__start-icon {
-  transform: scale(0.96);
-}
-.showreel__start:focus-visible {
-  outline: none;
-}
-.showreel__start:focus-visible .showreel__start-icon {
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.6), 0 10px 30px rgba(15, 17, 21, 0.25);
-}
-.showreel__frame[data-started="true"] .showreel__start {
-  opacity: 0;
-  visibility: hidden;
-}
-.showreel__frame:not([data-started="true"]) .showreel__bar {
-  display: none;
-}
-
 /* Control bar: play/pause, restart, timeline, sound */
 .showreel__bar {
   position: absolute;
@@ -2154,12 +2087,10 @@ html:has(.talk[open]) {
   transform: rotate(180deg);
 }
 
+/* Positioned against the viewport by JS (so the dialog can't clip it); opens upward by default */
 .talk__country-panel {
-  position: absolute;
+  position: fixed;
   z-index: 5;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -2167,8 +2098,26 @@ html:has(.talk[open]) {
   border-radius: var(--r-md);
   box-shadow: var(--shadow-3);
   overflow: hidden;
+  transform-origin: bottom left;
+  animation: country-in-up 180ms var(--ease-quick);
+}
+/* Opening upward: search sits at the bottom, next to the field and the thumb */
+.talk__country-panel[data-side="top"] {
+  flex-direction: column-reverse;
+}
+.talk__country-panel[data-side="top"] .talk__country-search {
+  border-bottom: 0;
+  border-top: 1px solid var(--border);
+}
+.talk__country-panel[data-side="bottom"] {
   transform-origin: top left;
-  animation: country-in 180ms var(--ease-quick);
+  animation-name: country-in;
+}
+@keyframes country-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
 }
 .talk__country-panel[hidden] {
   display: none;

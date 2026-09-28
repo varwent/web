@@ -8,12 +8,6 @@ export const BUSINESS_LABELS = {
   enterprise: "Enterprise",
   other: "Other",
 };
-// Which service button opened the form (optional context, not asked)
-export const INTEREST_LABELS = {
-  web: "Web development",
-  automation: "Automation",
-  ai: "AI integrations",
-};
 export const BUSINESS_TYPES = Object.keys(BUSINESS_LABELS);
 
 // National number length [min, max] for common countries; others fall back to 6–14
@@ -46,7 +40,6 @@ export function validateLead(input) {
     phone: "",
     phoneCountry: /^[A-Z]{2}$/.test(input.phoneCountry) ? input.phoneCountry : "",
     businessType: BUSINESS_TYPES.includes(input.businessType) ? input.businessType : "",
-    interest: Object.hasOwn(INTEREST_LABELS, input.interest) ? input.interest : "",
     page: clean(input.page, 200),
   };
 
