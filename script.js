@@ -287,7 +287,7 @@
     let openedAt = 0;
 
     const setError = (name, text) => {
-      const field = form.elements[name];
+      const field = control(name);
       const slot = form.querySelector(`[data-error-for="${name}"]`);
       if (field) {
         if (text) {
@@ -304,13 +304,43 @@
       if (slot) slot.textContent = text || "";
     };
 
+    const FIELDS = ["name", "phone", "email", "businessType"];
+    const countrySel = form.querySelector("[data-talk-country]");
+    const dialOut = form.querySelector("[data-talk-dial]");
+    const dialCode = () => countrySel.selectedOptions[0]?.dataset.dial || "";
+    const syncDial = () => (dialOut.textContent = dialCode());
+    countrySel.addEventListener("change", syncDial);
+
+    // Best guess at the visitor's country: time zone first, then browser language
+    (() => {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const byTz = { "Asia/Kolkata": "IN", "Asia/Calcutta": "IN", "Asia/Dubai": "AE", "Asia/Singapore": "SG",
+        "Europe/London": "GB", "Australia/Sydney": "AU", "Australia/Melbourne": "AU", "Europe/Berlin": "DE" };
+      let cc = byTz[tz];
+      if (!cc) {
+        const region = (navigator.language || "").split("-")[1];
+        if (region && countrySel.querySelector(`option[value="${region.toUpperCase()}"]`)) cc = region.toUpperCase();
+        else if (tz.startsWith("America/")) cc = "US";
+      }
+      if (cc && countrySel.querySelector(`option[value="${cc}"]`)) countrySel.value = cc;
+      syncDial();
+    })();
+
+    // Map a logical field to the control that should show the error / take focus
+    const control = (name) =>
+      name === "phone" ? form.elements.phoneNumber
+      : name === "businessType" ? form.querySelector('input[name="businessType"]')
+      : form.elements[name];
+
     const validate = () => {
       const errs = {};
-      const { name, email, message } = form.elements;
+      const { name, email, phoneNumber } = form.elements;
+      const digits = phoneNumber.value.replace(/\D/g, "").replace(/^0+/, "");
       if (!name.value.trim()) errs.name = "Please add your name.";
+      if (digits.length < 6 || digits.length + dialCode().length - 1 > 15) errs.phone = "Please add a valid phone number.";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) errs.email = "Please add a valid email.";
-      if (message.value.trim().length < 10) errs.message = "A line or two about the project, please.";
-      ["name", "email", "message"].forEach((n) => setError(n, errs[n]));
+      if (!form.querySelector('input[name="businessType"]:checked')) errs.businessType = "Please pick your business type.";
+      FIELDS.forEach((n) => setError(n, errs[n]));
       return errs;
     };
 
@@ -319,14 +349,11 @@
       if (!done.hidden) {
         // Fresh form after a previous successful send
         form.reset();
+        syncDial();
         form.hidden = false;
         done.hidden = true;
       }
-      if (service && form.elements.services) {
-        form.querySelectorAll('input[name="services"]').forEach((cb) => {
-          if (cb.value === service) cb.checked = true;
-        });
-      }
+      form.elements.interest.value = service || "";
       status.innerHTML = "";
       // Clock for the server's bot check starts when a fresh form first opens,
       // so reopening a half-filled form never looks "too fast"
@@ -358,12 +385,12 @@
     });
 
     // Clear a field's error as soon as it's fixed
-    form.addEventListener("input", (e) => {
-      const n = e.target.name;
-      if (e.target.getAttribute("aria-invalid") === "true") {
-        const errs = validate();
-        ["name", "email", "message"].forEach((k) => k !== n && !errs[k] && setError(k, ""));
-      }
+    form.addEventListener("input", () => {
+      // Once a field is flagged, clear its error as soon as it's valid (don't flag untouched ones)
+      if (!form.querySelector('[aria-invalid="true"]')) return;
+      const flagged = FIELDS.filter((n) => control(n)?.getAttribute("aria-invalid") === "true");
+      const errs = validate();
+      FIELDS.forEach((n) => setError(n, flagged.includes(n) ? errs[n] : ""));
     });
 
     form.addEventListener("submit", async (e) => {
@@ -372,18 +399,19 @@
       const errs = validate();
       const first = Object.keys(errs)[0];
       if (first) {
-        form.elements[first].focus();
+        control(first).focus();
         return;
       }
 
       const fd = new FormData(form);
       const payload = {
         name: fd.get("name"),
+        phoneCountry: fd.get("phoneCountry"),
+        phoneCode: dialCode(),
+        phoneNumber: fd.get("phoneNumber"),
         email: fd.get("email"),
-        company: fd.get("company"),
-        services: fd.getAll("services"),
-        budget: fd.get("budget") || "",
-        message: fd.get("message"),
+        businessType: fd.get("businessType") || "",
+        interest: fd.get("interest") || "",
         website: fd.get("website"),
         page: location.pathname + location.search,
         elapsedMs: Date.now() - openedAt,
@@ -409,7 +437,7 @@
         } else if (data.error === "validation" && data.fields) {
           Object.entries(data.fields).forEach(([k, v]) => setError(k, v));
           const k = Object.keys(data.fields)[0];
-          if (form.elements[k]) form.elements[k].focus();
+          if (control(k)) control(k).focus();
         } else if (res.status === 429) {
           status.innerHTML =
             'You\'ve sent a few already — we\'ll be in touch. Anything urgent: <a href="mailto:varwent@gmail.com">varwent@gmail.com</a>.';

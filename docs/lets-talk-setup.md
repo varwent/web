@@ -41,7 +41,8 @@ Leads land in database **`varwent`**, collection **`leads`** (override the datab
 2. Delete the sample code, paste all of `integrations/google-sheets/Code.gs`, click **Save**.
 3. In the function dropdown pick **`setup`** → **Run** → approve the Google permissions prompt
    (it's your own script: *Advanced → Go to project → Allow*).
-4. Open **Execution log** — copy the long secret it printed. That's `SHEETS_WEBHOOK_SECRET`.
+4. Open **Execution log** — copy the long secret it printed. That's `SHEETS_WEBHOOK_SECRET`
+   (leave `SHARED_SECRET` in the code as `PASTE_SECRET_HERE`; the script reads the one `setup` saved).
    A **Leads** tab with headers now exists in the sheet.
 5. **Deploy → New deployment** → type **Web app**
    - *Execute as*: **Me**
@@ -75,7 +76,10 @@ Environment variables apply to new deployments. Vercel → **Deployments** → l
 
 ```js
 {
-  name, email, company, services: ["web","ai"], budget: "5k-15k", message,
+  name, email,
+  phone: "+919876543210", phoneCountry: "IN",   // E.164
+  businessType: "ecommerce",                    // startup | small-business | ecommerce | agency | enterprise | other
+  interest: "ai",                               // which service card opened the form, if any
   page: "/", status: "new", createdAt, userAgent,
   ipHash,                                   // salted hash, for rate limiting only
   sheet: { attempts, syncedAt?, error? }    // Google Sheets copy status
@@ -85,6 +89,8 @@ Environment variables apply to new deployments. Vercel → **Deployments** → l
 Spam protection: hidden honeypot field, minimum fill time, same-origin check, and 5 submissions per visitor per 10 minutes.
 
 ## Troubleshooting
+
+Sheet columns: Received · Name · Phone · Email · Business type · Interest · Page · Lead ID
 
 - **Form says "Couldn't send that just now"** → Vercel → project → **Logs**, filter `lets-talk`.
   `MONGODB_URI is not set` = step 1 not done (or not redeployed). Timeouts = Atlas Network Access missing `0.0.0.0/0`.

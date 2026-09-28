@@ -67,10 +67,11 @@ function fakeCollection() {
 const valid = {
   name: "Priya Sharma",
   email: "Priya@Example.com",
-  company: "Acme Foods",
-  services: ["web", "ai", "bogus"],
-  budget: "5k-15k",
-  message: "We need a new marketing site with a chatbot.",
+  phoneCountry: "IN",
+  phoneCode: "+91",
+  phoneNumber: "098765 43210",
+  businessType: "ecommerce",
+  interest: "ai",
   page: "/",
   elapsedMs: 9000,
 };
@@ -109,7 +110,10 @@ test("valid lead is saved and returns 201", async () => {
 
   const doc = leads.docs[0];
   assert.equal(doc.email, "priya@example.com");
-  assert.deepEqual(doc.services, ["web", "ai"]); // unknown values dropped
+  assert.equal(doc.phone, "+919876543210"); // E.164: spaces and leading 0 removed
+  assert.equal(doc.phoneCountry, "IN");
+  assert.equal(doc.businessType, "ecommerce");
+  assert.equal(doc.interest, "ai");
   assert.equal(doc.status, "new");
   assert.equal(doc.sheet.attempts, 0);
   assert.match(doc.ipHash, /^[0-9a-f]{32}$/);
@@ -119,10 +123,10 @@ test("valid lead is saved and returns 201", async () => {
 
 test("missing fields return 400 with field errors", async () => {
   const { leads, handler } = setup();
-  const res = await handler(post({ name: "", email: "nope", message: "hi", elapsedMs: 9000 }));
+  const res = await handler(post({ name: "", email: "nope", phoneCode: "+91", phoneNumber: "12", businessType: "cafe", elapsedMs: 9000 }));
   assert.equal(res.status, 400);
   const body = await res.json();
-  assert.deepEqual(Object.keys(body.fields).sort(), ["email", "message", "name"]);
+  assert.deepEqual(Object.keys(body.fields).sort(), ["businessType", "email", "name", "phone"]);
   assert.equal(leads.docs.length, 0);
 });
 
@@ -163,10 +167,18 @@ test("database outage returns 503 without throwing", async () => {
 });
 
 test("validateLead trims and caps lengths", () => {
-  const { lead, errors } = validateLead({ ...valid, name: "  A  ", message: "x".repeat(5000) });
+  const { lead, errors } = validateLead({ ...valid, name: "  A  ", page: "/".repeat(500) });
   assert.equal(lead.name, "A");
-  assert.equal(lead.message.length, 3000);
+  assert.equal(lead.page.length, 200);
   assert.deepEqual(errors, {});
+});
+
+test("phone validation: country code required, E.164 max 15 digits", () => {
+  assert.ok(validateLead({ ...valid, phoneCode: "" }).errors.phone);
+  assert.ok(validateLead({ ...valid, phoneCode: "91" }).errors.phone);
+  assert.ok(validateLead({ ...valid, phoneCode: "+1", phoneNumber: "1234567890123456" }).errors.phone);
+  assert.equal(validateLead({ ...valid, phoneCode: "+1", phoneNumber: "(415) 555-0132" }).lead.phone, "+14155550132");
+  assert.equal(validateLead({ ...valid, phoneCountry: "not-a-code" }).lead.phoneCountry, "");
 });
 
 // --- Sheets sync ----------------------------------------------------------------
@@ -174,9 +186,10 @@ const env = { SHEETS_WEBHOOK_URL: "https://script.google.com/macros/s/x/exec", S
 const reply = (obj, status = 200) => new Response(JSON.stringify(obj), { status });
 
 test("toSheetRow uses readable labels", () => {
-  const row = toSheetRow({ _id: "abc", createdAt: new Date("2026-09-28T10:00:00Z"), ...valid, services: ["web", "ai"] });
-  assert.equal(row.services, "Web development, AI integrations");
-  assert.equal(row.budget, "$5k – $15k");
+  const row = toSheetRow({ _id: "abc", createdAt: new Date("2026-09-28T10:00:00Z"), ...valid, phone: "+919876543210" });
+  assert.equal(row.businessType, "E-commerce / D2C");
+  assert.equal(row.interest, "AI integrations");
+  assert.equal(row.phone, "+919876543210");
   assert.equal(row.id, "abc");
 });
 

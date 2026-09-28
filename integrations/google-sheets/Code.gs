@@ -2,14 +2,18 @@
  * Varwent — "Let's talk" leads → Google Sheets
  *
  * Paste this into the sheet's Apps Script editor (Extensions → Apps Script),
- * run `setup` once, then deploy as a web app. Full steps: docs/lets-talk-setup.md
+ * put the secret in SHARED_SECRET below (or run `setup` to generate one), then
+ * deploy as a web app. Full steps: docs/lets-talk-setup.md
  *
  * The website's /api/lets-talk function POSTs each lead here after saving it
  * to MongoDB. Rows are de-duplicated by Lead ID, so retries are safe.
  */
 
+// Must match SHEETS_WEBHOOK_SECRET in Vercel. Leave as is to use the Script Property from setup().
+const SHARED_SECRET = 'PASTE_SECRET_HERE';
+
 const SHEET_NAME = 'Leads';
-const HEADERS = ['Received', 'Name', 'Email', 'Company', 'Services', 'Budget', 'Message', 'Page', 'Lead ID'];
+const HEADERS = ['Received', 'Name', 'Phone', 'Email', 'Business type', 'Interest', 'Page', 'Lead ID'];
 const ID_COLUMN = HEADERS.indexOf('Lead ID') + 1;
 
 /** Run once from the editor: creates the Leads tab and a shared secret. */
@@ -27,7 +31,7 @@ function setup() {
 function doPost(e) {
   try {
     const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    const secret = PropertiesService.getScriptProperties().getProperty('SHARED_SECRET');
+    const secret = getSecret_();
     if (!secret || body.secret !== secret) return json_({ ok: false, error: 'unauthorized' });
 
     const lead = body.lead || {};
@@ -41,11 +45,10 @@ function doPost(e) {
       sheet.appendRow([
         lead.createdAt ? new Date(lead.createdAt) : new Date(),
         safe_(lead.name),
+        safe_(lead.phone),
         safe_(lead.email),
-        safe_(lead.company),
-        safe_(lead.services),
-        safe_(lead.budget),
-        safe_(lead.message),
+        safe_(lead.businessType),
+        safe_(lead.interest),
         safe_(lead.page),
         safe_(lead.id),
       ]);
@@ -63,6 +66,11 @@ function doGet() {
   return json_({ ok: true, service: 'varwent-leads' });
 }
 
+function getSecret_() {
+  if (SHARED_SECRET && SHARED_SECRET !== 'PASTE_SECRET_HERE') return SHARED_SECRET;
+  return PropertiesService.getScriptProperties().getProperty('SHARED_SECRET');
+}
+
 function getSheet_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName(SHEET_NAME);
@@ -72,7 +80,7 @@ function getSheet_() {
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
     sheet.setFrozenRows(1);
     sheet.getRange('A:A').setNumberFormat('dd mmm yyyy, hh:mm');
-    sheet.setColumnWidth(7, 420);
+    sheet.getRange('C:C').setNumberFormat('@'); // keep "+91…" as text
   }
   return sheet;
 }

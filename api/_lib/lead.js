@@ -1,20 +1,20 @@
 import { createHash } from "node:crypto";
 
-export const SERVICE_LABELS = {
+export const BUSINESS_LABELS = {
+  startup: "Startup",
+  "small-business": "Small business",
+  ecommerce: "E-commerce / D2C",
+  agency: "Agency",
+  enterprise: "Enterprise",
+  other: "Other",
+};
+// Which service button opened the form (optional context, not asked)
+export const INTEREST_LABELS = {
   web: "Web development",
   automation: "Automation",
   ai: "AI integrations",
-  other: "Something else",
 };
-export const BUDGET_LABELS = {
-  "under-1k": "Under $1k",
-  "1k-5k": "$1k – $5k",
-  "5k-15k": "$5k – $15k",
-  "15k-plus": "$15k+",
-  "not-sure": "Not sure yet",
-};
-export const SERVICES = Object.keys(SERVICE_LABELS);
-export const BUDGETS = Object.keys(BUDGET_LABELS);
+export const BUSINESS_TYPES = Object.keys(BUSINESS_LABELS);
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const RATE_LIMIT = { max: 5, windowMs: 10 * 60_000 };
@@ -31,21 +31,26 @@ const clean = (v, max) =>
 
 export function validateLead(input) {
   const errors = {};
+  const dial = clean(input.phoneCode, 5);
+  const national = clean(input.phoneNumber, 30).replace(/\D/g, "").replace(/^0+/, "");
   const lead = {
     name: clean(input.name, 100),
     email: clean(input.email, 254).toLowerCase(),
-    company: clean(input.company, 120),
-    services: Array.isArray(input.services)
-      ? [...new Set(input.services.filter((s) => SERVICES.includes(s)))]
-      : [],
-    budget: BUDGETS.includes(input.budget) ? input.budget : "",
-    message: clean(input.message, 3000),
+    phone: "",
+    phoneCountry: /^[A-Z]{2}$/.test(input.phoneCountry) ? input.phoneCountry : "",
+    businessType: BUSINESS_TYPES.includes(input.businessType) ? input.businessType : "",
+    interest: Object.hasOwn(INTEREST_LABELS, input.interest) ? input.interest : "",
     page: clean(input.page, 200),
   };
 
   if (!lead.name) errors.name = "Please add your name.";
   if (!EMAIL_RE.test(lead.email)) errors.email = "Please add a valid email.";
-  if (lead.message.length < 10) errors.message = "A line or two about the project, please.";
+  // E.164: "+" then at most 15 digits in total
+  if (!/^\+[1-9]\d{0,3}$/.test(dial)) errors.phone = "Please pick a country code.";
+  else if (national.length < 6 || dial.length - 1 + national.length > 15) {
+    errors.phone = "Please add a valid phone number.";
+  } else lead.phone = dial + national;
+  if (!lead.businessType) errors.businessType = "Please pick your business type.";
 
   return { lead, errors };
 }
