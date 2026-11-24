@@ -17,7 +17,7 @@ Claude chat ──MCP──> Modal web endpoint ──spawn──> L40S GPU (sta
 | `--vae` | webmp3/Sakura-MiniMax-H3-GGUF | minimax_h3_video_vae_fp16.safetensors |
 | `--audio-vae` | webmp3/Sakura-MiniMax-H3-GGUF | minimax_h3_audio_vae_fp32.safetensors |
 
-ComfyUI is not used. The model runs with `sd-cli` from stable-diffusion.cpp, the only runtime the model card supports.
+ComfyUI is not used. The model runs with `sd-cli` from stable-diffusion.cpp, the only runtime the model card supports. The app uses the project's prebuilt CUDA image (`ghcr.io/leejet/stable-diffusion.cpp:master-cuda`), so nothing gets compiled.
 
 ---
 
@@ -50,12 +50,12 @@ modal secret create sakura-mcp MCP_TOKEN=$(python -c "import secrets;print(secre
 ```
 To see the token later, open the Modal dashboard: Secrets → sakura-mcp.
 
-### 4. Download the weights into a Modal Volume (one time, ~15–40 min)
+### 4. Download the weights into a Modal Volume (one time, all 4 files in parallel, ~5–20 min)
 ```bash
 modal run app.py::download_models
 ```
 
-### 5. Test from the terminal (builds the CUDA image the first time, ~10–15 min)
+### 5. Test from the terminal (first run pulls the prebuilt sd.cpp CUDA image, ~2–4 min)
 ```bash
 modal run app.py --prompt "A red fox runs through fresh snow at sunrise, cinematic tracking shot, wind sound"
 ```

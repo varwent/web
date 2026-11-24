@@ -40,17 +40,13 @@ outputs_vol = modal.Volume.from_name("sakura-outputs", create_if_missing=True)
 GPU = os.environ.get("SAKURA_GPU", "L40S")  # or "A100-80GB" / "H100"
 
 # ---------------------------------------------------------------- images
-# stable-diffusion.cpp built with CUDA. Arch 80 = A100, 89 = L40S/L4, 90 = H100.
+# Prebuilt stable-diffusion.cpp CUDA image published by the sd.cpp project (no compiling).
+# It is rebuilt on every push to sd.cpp master, so it includes MiniMax-H3 support.
+SD_CLI = "/sd.cpp/bin/sd-cli"
 sd_image = (
-    modal.Image.from_registry("nvidia/cuda:12.8.1-devel-ubuntu22.04", add_python="3.11")
-    .apt_install("git", "cmake", "build-essential", "ffmpeg", "ca-certificates")
-    .run_commands(
-        "git clone --recursive https://github.com/leejet/stable-diffusion.cpp /opt/sdcpp",
-        "cd /opt/sdcpp && cmake -S . -B build -DSD_CUDA=ON -DGGML_NATIVE=OFF "
-        "-DCMAKE_CUDA_ARCHITECTURES='80;89;90' -DCMAKE_BUILD_TYPE=Release",
-        "cd /opt/sdcpp && cmake --build build --config Release -j$(nproc)",
-        "cp /opt/sdcpp/build/bin/sd-cli /usr/local/bin/sd-cli",
-    )
+    modal.Image.from_registry("ghcr.io/leejet/stable-diffusion.cpp:master-cuda", add_python="3.11")
+    .entrypoint([])
+    .apt_install("ffmpeg")
 )
 
 download_image = modal.Image.debian_slim(python_version="3.11").pip_install(
@@ -71,22 +67,29 @@ app = modal.App(APP_NAME)
     secrets=[modal.Secret.from_name("huggingface")],
     timeout=3 * 60 * 60,
 )
-def download_models():
+def download_one(repo: str, name: str):
     from huggingface_hub import hf_hub_download
 
+    if (MODELS_DIR / name).exists():
+        print(f"already have {name}")
+        return
+    print(f"downloading {repo}/{name} ...")
+    hf_hub_download(repo_id=repo, filename=name, local_dir=MODELS_DIR)
+    models_vol.commit()
+    print(f"done {name}")
+
+
+@app.function(image=download_image, volumes={MODELS_DIR: models_vol}, timeout=3 * 60 * 60)
+def download_models():
+    """Downloads all 4 files at the same time (one container per file)."""
     wanted = [
         (ENCODER_REPO, ENCODER_FILE),
         (DENOISER_REPO, DENOISER_FILE),
         (DENOISER_REPO, VIDEO_VAE_FILE),
         (DENOISER_REPO, AUDIO_VAE_FILE),
     ]
-    for repo, name in wanted:
-        if (MODELS_DIR / name).exists():
-            print(f"already have {name}")
-            continue
-        print(f"downloading {repo}/{name} ...")
-        hf_hub_download(repo_id=repo, filename=name, local_dir=MODELS_DIR)
-        models_vol.commit()
+    list(download_one.starmap(wanted))
+    models_vol.reload()
     for p in sorted(MODELS_DIR.glob("*")):
         if p.is_file():
             print(f"{p.name:70s} {p.stat().st_size / 1e9:6.2f} GB")
@@ -121,7 +124,7 @@ class VideoGen:
         avi = work / "out.avi"
 
         cmd = [
-            "sd-cli", "-M", "vid_gen",
+            SD_CLI, "-M", "vid_gen",
             "--diffusion-model", str(MODELS_DIR / DENOISER_FILE),
             "--llm", str(MODELS_DIR / ENCODER_FILE),
             "--vae", str(MODELS_DIR / VIDEO_VAE_FILE),
