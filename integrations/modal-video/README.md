@@ -87,6 +87,7 @@ Claude calls `generate_video`, then `check_video` until it gets the `video_url` 
 ## Tools
 - `generate_video(prompt, width=864, height=480, frames=56, fps=24, steps=8, seed=-1)` → `job_id`
 - `check_video(job_id)` → `running` / `failed` + error / `done` + `video_url`
+- `list_videos(limit=10)` → your latest MP4 links
 
 Clip length is `frames / fps` (56 / 24 ≈ 2.3 s). Use multiples of 32 for width and height. Settings follow the model card (cfg 1.0, 8 steps). Raise `steps` to 20 for better quality at about 2.5× the time.
 

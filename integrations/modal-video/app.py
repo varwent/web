@@ -227,6 +227,19 @@ def web():
             "size_mb": result["size_mb"],
         }
 
+    @mcp.tool()
+    def list_videos(limit: int = 10) -> dict:
+        """List the most recent finished videos (newest first) with their MP4 links."""
+        outputs_vol.reload()
+        files = sorted(OUTPUTS_DIR.glob("*.mp4"), key=lambda p: p.stat().st_mtime, reverse=True)
+        return {
+            "videos": [
+                {"file": p.name, "video_url": f"{base_url}/{token}/videos/{p.name}",
+                 "size_mb": round(p.stat().st_size / 1e6, 2)}
+                for p in files[: max(1, min(limit, 50))]
+            ]
+        }
+
     @asynccontextmanager
     async def lifespan(_app):
         async with mcp.session_manager.run():
